@@ -1,0 +1,50 @@
+#video_player{
+    height: 400px;
+    width:600px;
+    margin:auto;
+    margin-top: 20px;
+}
+
+.navigation_bar{
+    /* Navbar styling properties -must- be set from inside Header.html due to Bootstrap behaviour. Open the Header.html file to customize the navigation bar */
+}
+
+p{
+    text-align: center;
+}
+
+
+
+
+h1{
+    text-align: center;
+    padding-top:10px;
+    padding-bottom: 10px;
+}
+
+h6{
+    text-align: center;
+    padding-bottom: 5px;
+}
+
+.g-signin2{
+    margin: auto;
+    width: 100%;
+}
+
+.g-signin2 > div{
+    margin: 0 auto;
+}
+
+textarea{
+    margin: auto;
+    display: block;
+    margin-top: 5px;
+}
+
+button{
+    margin:auto;
+    margin-top: 20px;
+    text-align: center;
+    display: block;
+}
