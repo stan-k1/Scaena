@@ -91,14 +91,25 @@ echo($_SERVER['QUERY_STRING']);?>
 <p id="query_check" style="display: none">Waiting For Data...</p> <!-- Hidden Element that signifies whether data has query results have been printed-->
 
 <div class="container">
+
+
+
     <div class="text-center">
-    <div class="btn-group" role="group" aria-label="Basic example">
-        <button type="button" class="btn btn-secondary" onclick="Query_Analytics('3daysAgo','today', false)">30 Days </button>
-        <button type="button" class="btn btn-secondary" onclick="Query_Analytics('2010-01-01','today', false)">All Time</button>
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+            <label class="btn btn-secondary active">
+                <input type="radio" name="data_range" id="30d" autocomplete="off" checked onclick="Query_Analytics('3daysAgo','today', false)">30 Days
+            </label>
+            <label class="btn btn-secondary">
+                <input type="radio" name="data_range" id="365d" autocomplete="off" onclick="Query_Analytics('365daysAgo','today', false)">1 Year
+            </label>
+            <label class="btn btn-secondary">
+                <input type="radio" name="data_range" id="infd" onclick="Query_Analytics('2010-01-01','today', false)">All Time
+            </label>
+        </div>
     </div>
-    </div>
+
     <!--Analytic: Video Completion-->
-    <h2>Video Completions</h2>
+    <h2 class="analytic_heading">Video Completions</h2>
     <div class="row">
         <div class="col-xl-6 text-center" id="CompletionsChart">
             <canvas id="myChart" width="400" height="400"></canvas>
@@ -155,7 +166,7 @@ echo($_SERVER['QUERY_STRING']);?>
 </div>
 
 <!--Analytic: Device Type-->
-<h2>Device Types</h2>
+<h2 class="analytic_heading">Device Types</h2>
 <div class="row">
     <div class="col-xl-6 text-center" id="devicesChartDiv">
         <canvas id="devicesChart" width="400" height="400"></canvas>
