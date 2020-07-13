@@ -1,3 +1,8 @@
+body{
+    max-width: 1600px;
+    margin: auto;
+}
+
 #video_player{
     height: 400px;
     width:600px;
@@ -11,20 +16,34 @@
 
 p{
     text-align: center;
+    margin: auto;
 }
-
-
 
 
 h1{
     text-align: center;
+    padding-top:20px;
+    padding-bottom: 20px;
+    margin:auto;
+}
+
+h2{
+    text-align: center;
+    padding-top:20px;
+    padding-bottom: 20px;
+    margin:auto;
+}
+
+h3{
+    text-align: center;
     padding-top:10px;
     padding-bottom: 10px;
+    margin:auto;
 }
 
 h6{
     text-align: center;
-    padding-bottom: 5px;
+    margin-bottom: 25px;
 }
 
 .g-signin2{
@@ -42,9 +61,70 @@ textarea{
     margin-top: 5px;
 }
 
-button{
+.inpage_button{
     margin:auto;
     margin-top: 20px;
     text-align: center;
     display: block;
+}
+
+video{
+    margin: auto;
+}
+
+.container{
+    max-width: 2000px;
+}
+
+.navbar-nav > li{
+    margin-left:10px;
+    margin-right:0px;
+}
+
+i{
+    display: inline;
+    vertical-align: middle
+}
+
+.material-icons{
+    vertical-align: -25%;
+}
+
+
+canvas{
+    margin-left: 50px;
+}
+
+.vjs-play-progress {
+    opacity: 0.7 !important;
+}
+
+.video-js .vjs-progress-control{
+
+}
+
+.suggestions{
+    max-width: 500px !important;
+}
+
+.suggestionsTitle{
+    margin-top: 40px;
+}
+
+.g-signin2{
+    margin-top: 40px;
+}
+
+.btn-group{
+    margin: auto;
+}
+
+#CompletionsChart{
+    margin-left: -40px;
+}
+
+.analytics_detail{
+    display: inline;
+    margin-bottom: 500px !important;
+    padding-bottom: 500px;
 }
