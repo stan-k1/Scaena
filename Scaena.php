@@ -105,8 +105,46 @@ echo($_SERVER['QUERY_STRING']);?>
             <label class="btn btn-secondary">
                 <input type="radio" name="data_range" id="infd" onclick="Query_Analytics('2010-01-01','today', false)">All Time
             </label>
+            <label class="btn btn-secondary">
+                <input type="radio" name="data_range" id="cusd" data-toggle="modal" data-target="#exampleModal"">Custom
+            </label>
         </div>
     </div>
+
+    <!-- Custom Data Range Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Custom Date Range</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form onkeydown="return event.key !== 'Enter'">
+                        <label for="daysStart">Please enter the number of previous days to retrieve data from:</label><br>
+                        <input type="text" class="form-control" id="daysStart" name="start"><br>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="customRange()" data-dismiss="modal">Get Data</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function customRange() {
+            var days = document.getElementById("daysStart").value;
+            if(days==parseInt(days)){
+                daysString=days.concat("daysAgo");
+                Query_Analytics(daysString,'today', false)
+            }
+            else alert("Please enter a valid number.")
+        }
+    </script>
 
     <!--Analytic: Video Completion-->
     <h2 class="analytic_heading">Video Completions</h2>
@@ -225,7 +263,69 @@ echo($_SERVER['QUERY_STRING']);?>
         <p id="q2suggestions" class="suggestions">Stand by..</p>
     </div>
 </div>
+
+<!--Analytic: Plays, Pauses, Page Views-->
+<h2 class="analytic_heading">Plays, Pauses and Views </h2>
+    <div class="row">
+        <div class="col-xl-6 text-center" id="ppvChartDiv">
+            <canvas id="ppvChart" width="400" height="400"></canvas>
+            <script>
+                var ctx = document.getElementById('ppvChart').getContext('2d');
+
+                var ppvChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Plays', 'Pauses','Views'],
+                        datasets: [{
+                            data: [33,33,33],
+                            backgroundColor: [
+                                'rgba(77, 124, 190, 0.7)',
+                                'rgba(244,231,211,0.7)',
+                                'rgba(31,78,95,0.7)',
+                            ],
+                            borderColor: [
+                                'rgba(77, 124, 190, 1)',
+                                'rgba(244,231,211)',
+                                'rgba(31,78,95)',
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive:true,
+                        maintainAspectRatio: false,
+                        legend: {
+                            display: false
+
+                        }}
+                });
+
+            </script>
+        </div>
+
+        <div class="col-xl-6 text-center">
+        <h3 wclass="suggestionsTitle">Overview</h3>
+        <br>
+
+        <p class="analytics_detail"><i class="material-icons">play_arrow</i> Video Plays: </p>
+        <span id="q3plays"> </span>
+        <br>
+        <br>
+
+        <p class="analytics_detail"><i class="material-icons">pause</i> Video Pauses: </p>
+        <span id="q3pauses"> </span>
+        <br>
+        <br>
+
+        <p class="analytics_detail"><i class="material-icons">remove_red_eye</i> Page Views: </p>
+        <span id="q3views"> </span>
+
+        <h3 class="suggestionsTitle">Suggestions</h3>
+        <p id="q3suggestions" class="suggestions">Stand by..</p>
+    </div>
+
 </div>
+
 
 <button class="inpage_button" id="responseToggle">Show Analytics Response (Advanced)</button>
 <a href="#" name="button1" onclick="dataLayer.push({'event': 'button1-click'});" >Button 1</a>

@@ -9,6 +9,10 @@
 
             //Data Retrieval Variables
             var vidCompletions;
+            var views;
+
+            //Metrics used in multiple display functons (function globals)
+            var plays;
 
             queryReports_Analytics();
 
@@ -51,9 +55,9 @@
             function displayResults(response) {
                 var formattedJson = JSON.stringify(response.result, null, 2);
                 var original = response.result;
+                views = original.reports[0].data.totals[0].values[0];
                 if (initQueryBool) {
                     document.getElementById('query-output').value = formattedJson;
-                    var views = original.reports[0].data.totals[0].values[0];
                     document.getElementById('views').innerHTML=views;
                     var sessions = original.reports[0].data.totals[0].values[1];
                     document.getElementById('sessions').innerHTML=sessions;
@@ -152,18 +156,19 @@
                 var original = response.result;
                 document.getElementById('query-output').value = formattedJson;
 
-                var x = original.reports[0].data.totals[0].values[0];
+                plays = original.reports[0].data.totals[0].values[0];
                 if (initQueryBool) {
-                    document.getElementById('plays').innerHTML=x;
+                    document.getElementById('plays').innerHTML=plays;
                 }
-                document.getElementById('q1partials').innerHTML=x;
+                document.getElementById('q1partials').innerHTML=plays;
+                document.getElementById('q3plays').innerHTML=plays;
 
                 <!--Prevents no login <p> message from showing if data has been retrieved-->
                 document.getElementById('query_check').innerText = "Logged in and data printed";
                 <!--Hides the <p> if data is retrieved after the message has been displayed-->
                 $('#no_login_message').hide();
 
-                var VidCompletionsPercentage = vidCompletions * (100 / x).toFixed(2);
+                var VidCompletionsPercentage = vidCompletions * (100 / plays).toFixed(2);
                 VidCompletionsPercentage = Math.round(VidCompletionsPercentage * 100) / 100;
                 var VidCompletionsPercentageReminder = 100 - VidCompletionsPercentage;
                 VidCompletionsPercentageReminder = Math.round(VidCompletionsPercentageReminder * 100) / 100;
@@ -245,8 +250,72 @@
                 }
 
                 console.log("DisplayResultsDevices has been executed.")
+                queryReports5()
 
             }
+
+            // Query the API and print the results to the page.
+            function queryReports5() {
+                mydata = gapi.client.request({
+                    path: '/v4/reports:batchGet',
+                    root: 'https://analyticsreporting.googleapis.com/',
+                    method: 'POST',
+                    body: {
+                        reportRequests: [
+                            {
+                                viewId: VIEW_ID,
+                                dateRanges: [{startDate: startDateStr, endDate: endDateStr}],
+                                metrics: [
+                                    {expression: 'ga:totalEvents'}],
+                                "dimensionFilterClauses": [{
+                                    "filters": [
+                                        {
+                                            "operator": "PARTIAL",
+                                            "dimensionName": "ga:pagePath",
+                                            "expressions": [
+                                                "/Scaena/Scaena.php"
+                                            ]
+                                        }
+                                    ]
+                                },
+                                    {
+                                        "filters": [{
+                                            "dimension_name": "ga:eventAction",
+                                            "operator": "PARTIAL",
+                                            "expressions": ["Paused"]
+                                        }]
+                                    }]
+                            }]
+                    }
+                }).then(displayResults5, console.error.bind(console));
+            }
+
+            function displayResults5(response) {
+                var formattedJson = JSON.stringify(response.result, null, 2);
+                var original = response.result;
+                document.getElementById('query-output').value = formattedJson;
+
+                var pauses = original.reports[0].data.totals[0].values[0];
+                document.getElementById('q3pauses').innerHTML = pauses;
+
+                document.getElementById('q3views').innerHTML = views;
+
+                ppvChart.data.datasets[0].data = [plays, pauses, views];
+                ppvChart.update();
+
+                //q2 Suggestions Logic
+                if (pauses/plays>=4) {
+                    document.getElementById("q3suggestions").innerHTML = "Viewers seem to pause multiple times within this video. Consider offering more detailed explanations or providing additional related material .";
+                } else {
+                    document.getElementById("q3suggestions").innerHTML = "Viewers do not seem to pause particularly frequently on this video. This suggests that the material is clear and easy to comprehend."
+                }
+            }
+
+
+
+
+
+
 
 
         }
