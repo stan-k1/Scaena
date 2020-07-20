@@ -23,7 +23,7 @@
             var formattedJson = JSON.stringify(response.result, null, 2);
             var original = response.result;
             document.getElementById('query-output').value = formattedJson;
-            Query_Analytics('1daysAgo', 'today',true);
+            Query_Analytics('30daysAgo', 'today',true);
         }
     }
 </script>

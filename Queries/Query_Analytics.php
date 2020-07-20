@@ -10,6 +10,9 @@
             //Data Retrieval Variables
             var vidCompletions;
             var views;
+            var progress25;
+            var progress50;
+
 
             //Metrics used in multiple display functons (function globals)
             var plays;
@@ -30,7 +33,10 @@
                                 metrics: [
                                     {expression: 'ga:pageviews'},
                                     {expression: 'ga:sessions'},
-                                    {expression: 'ga:visitors'}
+                                    {expression: 'ga:visitors'},
+                                    {expression: 'ga:timeOnPage'},
+                                    {expression: 'ga:sessionDuration'},
+                                    {expression: 'ga:exitRate'}
                                 ],
                                 "dimensionFilterClauses": [
                                     {
@@ -56,14 +62,47 @@
                 var formattedJson = JSON.stringify(response.result, null, 2);
                 var original = response.result;
                 views = original.reports[0].data.totals[0].values[0];
+                var sessions = original.reports[0].data.totals[0].values[1];
+                var visitors = original.reports[0].data.totals[0].values[2];
+                var timeonpage = original.reports[0].data.totals[0].values[3];
+                var seduration = original.reports[0].data.totals[0].values[4];
+                var exitrate= original.reports[0].data.totals[0].values[5];
+
+                document.getElementById('q4sessions').innerHTML=sessions;
+                document.getElementById('q4pagetime').innerHTML=parseInt(timeonpage);
+                document.getElementById('q4setime').innerHTML=parseInt(seduration);
+                timeseChart.data.datasets[0].data = [timeonpage, seduration, sessions];
+                timeseChart.update();
+
+                var nonexitrate=100-exitrate;
+                exitrate=parseFloat(exitrate).toFixed(2);
+                nonexitrate=parseFloat(nonexitrate).toFixed(2);
+                document.getElementById('q6exitrate').innerHTML=exitrate+'%';
+                document.getElementById('q6nonexitrate').innerHTML=nonexitrate+'%';
+                exitChart.data.datasets[0].data = [exitrate, nonexitrate];
+                exitChart.update();
+
                 if (initQueryBool) {
-                    document.getElementById('query-output').value = formattedJson;
+                    // document.getElementById('query-output').value = formattedJson;
                     document.getElementById('views').innerHTML=views;
-                    var sessions = original.reports[0].data.totals[0].values[1];
                     document.getElementById('sessions').innerHTML=sessions;
-                    var visitors = original.reports[0].data.totals[0].values[2];
                     document.getElementById('visitors').innerHTML=visitors;
                 }
+
+                //q4 Suggestions Logic
+                if (seduration/timeonpage<1) {
+                    document.getElementById("q4suggestions").innerHTML = "Time spent on this page is larger than the average session duration for the site. This suggest that students spend a particularly large amount of time on this page.";
+                } else {
+                    document.getElementById("q4suggestions").innerHTML = "Time spent on this page is equal or less than the average session duration for the site. This suggest that students spend an average amount of time on this page."
+                }
+
+                //q6 Suggestions Logic
+                if (exitrate>nonexitrate) {
+                    document.getElementById("q6suggestions").innerHTML = "Most students abandon the site after visiting this page. This might indicate that the content is taxing. Consider offering additional clarifications or splitting content into multiple videos of shorter duration.";
+                } else {
+                    document.getElementById("q6suggestions").innerHTML = "Most students continue browsing this site after visiting this page. This indicates that the content duration is ideal and that the content is not overly taxing. Consider clarifying whether students require additional clarifications on the subjects discussed."
+                }
+
                 queryReports2()
             }
 
@@ -107,7 +146,7 @@
             function displayResults2(response) {
                 var formattedJson = JSON.stringify(response.result, null, 2);
                 var original = response.result;
-                document.getElementById('query-output').value = formattedJson;
+                // document.getElementById('query-output').value = formattedJson;
                 var x = original.reports[0].data.totals[0].values[0];
                 if (initQueryBool){document.getElementById('completions').innerHTML=x;}
                 document.getElementById('q1completions').innerHTML=x;
@@ -154,7 +193,7 @@
             function displayResults3(response) {
                 var formattedJson = JSON.stringify(response.result, null, 2);
                 var original = response.result;
-                document.getElementById('query-output').value = formattedJson;
+                // document.getElementById('query-output').value = formattedJson;
 
                 plays = original.reports[0].data.totals[0].values[0];
                 if (initQueryBool) {
@@ -216,7 +255,7 @@
             function displayResultsDevices(response) {
                 var formattedJson = JSON.stringify(response.result, null, 2);
                 var original = response.result;
-                document.getElementById('query-output').value = formattedJson;
+                // document.getElementById('query-output').value = formattedJson;
 
                 var x = original.reports[0].data.totals[0].values[0];
                 if (x === undefined) {
@@ -293,7 +332,7 @@
             function displayResults5(response) {
                 var formattedJson = JSON.stringify(response.result, null, 2);
                 var original = response.result;
-                document.getElementById('query-output').value = formattedJson;
+                // document.getElementById('query-output').value = formattedJson;
 
                 var pauses = original.reports[0].data.totals[0].values[0];
                 document.getElementById('q3pauses').innerHTML = pauses;
@@ -305,10 +344,166 @@
 
                 //q2 Suggestions Logic
                 if (pauses/plays>=4) {
-                    document.getElementById("q3suggestions").innerHTML = "Viewers seem to pause multiple times within this video. Consider offering more detailed explanations or providing additional related material .";
+                    document.getElementById("q3suggestions").innerHTML = "Students seem to pause multiple times within this video. Consider offering more detailed explanations or providing additional related material .";
                 } else {
-                    document.getElementById("q3suggestions").innerHTML = "Viewers do not seem to pause particularly frequently on this video. This suggests that the material is clear and easy to comprehend."
+                    document.getElementById("q3suggestions").innerHTML = "Students do not seem to pause particularly frequently on this video. This suggests that the material is clear and easy to comprehend."
                 }
+                queryReports6();
+            }
+
+            // Query the API and print the results to the page.
+            function queryReports6() {
+                mydata = gapi.client.request({
+                    path: '/v4/reports:batchGet',
+                    root: 'https://analyticsreporting.googleapis.com/',
+                    method: 'POST',
+                    body: {
+                        reportRequests: [
+                            {
+                                viewId: VIEW_ID,
+                                dateRanges: [{startDate: startDateStr, endDate: endDateStr}],
+                                metrics: [
+                                    {expression: 'ga:totalEvents'}],
+                                "dimensionFilterClauses": [{
+                                    "filters": [
+                                        {
+                                            "operator": "PARTIAL",
+                                            "dimensionName": "ga:pagePath",
+                                            "expressions": [
+                                                "/Scaena/Scaena.php"
+                                            ]
+                                        }
+                                    ]
+                                },
+                                    {
+                                        "filters": [{
+                                            "dimension_name": "ga:eventAction",
+                                            "operator": "PARTIAL",
+                                            "expressions": ["25"]
+                                        }]
+                                    }]
+                            }]
+                    }
+                }).then(displayResults6, console.error.bind(console));
+            }
+
+            function displayResults6(response) {
+                var formattedJson = JSON.stringify(response.result, null, 2);
+                var original = response.result;
+                document.getElementById('query-output').value = formattedJson;
+
+                progress25 = original.reports[0].data.totals[0].values[0];
+                document.getElementById('q5progress25').innerHTML=progress25;
+                queryReports7();
+            }
+
+            function queryReports7() {
+                mydata = gapi.client.request({
+                    path: '/v4/reports:batchGet',
+                    root: 'https://analyticsreporting.googleapis.com/',
+                    method: 'POST',
+                    body: {
+                        reportRequests: [
+                            {
+                                viewId: VIEW_ID,
+                                dateRanges: [{startDate: startDateStr, endDate: endDateStr}],
+                                metrics: [
+                                    {expression: 'ga:totalEvents'}],
+                                "dimensionFilterClauses": [{
+                                    "filters": [
+                                        {
+                                            "operator": "PARTIAL",
+                                            "dimensionName": "ga:pagePath",
+                                            "expressions": [
+                                                "/Scaena/Scaena.php"
+                                            ]
+                                        }
+                                    ]
+                                },
+                                    {
+                                        "filters": [{
+                                            "dimension_name": "ga:eventAction",
+                                            "operator": "PARTIAL",
+                                            "expressions": ["25"]
+                                        }]
+                                    }]
+                            }]
+                    }
+                }).then(displayResults7, console.error.bind(console));
+            }
+
+            function displayResults7(response) {
+                var formattedJson = JSON.stringify(response.result, null, 2);
+                var original = response.result;
+                document.getElementById('query-output').value = formattedJson;
+
+                progress50 = original.reports[0].data.totals[0].values[0];
+                document.getElementById('q5progress50').innerHTML=progress50;
+                queryReports8();
+            }
+
+            function queryReports8() {
+                mydata = gapi.client.request({
+                    path: '/v4/reports:batchGet',
+                    root: 'https://analyticsreporting.googleapis.com/',
+                    method: 'POST',
+                    body: {
+                        reportRequests: [
+                            {
+                                viewId: VIEW_ID,
+                                dateRanges: [{startDate: startDateStr, endDate: endDateStr}],
+                                metrics: [
+                                    {expression: 'ga:totalEvents'}],
+                                "dimensionFilterClauses": [{
+                                    "filters": [
+                                        {
+                                            "operator": "PARTIAL",
+                                            "dimensionName": "ga:pagePath",
+                                            "expressions": [
+                                                "/Scaena/Scaena.php"
+                                            ]
+                                        }
+                                    ]
+                                },
+                                    {
+                                        "filters": [{
+                                            "dimension_name": "ga:eventAction",
+                                            "operator": "PARTIAL",
+                                            "expressions": ["75"]
+                                        }]
+                                    }]
+                            }]
+                    }
+                }).then(displayResults8, console.error.bind(console));
+            }
+
+            function displayResults8(response) {
+                var formattedJson = JSON.stringify(response.result, null, 2);
+                var original = response.result;
+                document.getElementById('query-output').value = formattedJson;
+
+                var progress75 = original.reports[0].data.totals[0].values[0];
+                document.getElementById('q5progress75').innerHTML=progress75;
+                document.getElementById('q5plays').innerHTML=plays;
+                document.getElementById('q5completions').innerHTML=vidCompletions;
+
+                progChart.data.datasets[0].data = [plays, progress25, progress50, progress75, vidCompletions];
+                progChart.update();
+
+                //q5 Suggestions Logic
+                if (progress50>=vidCompletions*2){
+                    document.getElementById('q5suggestions').innerHTML="Many students that watch this video do not complete it. Consider making shorter and more concise content, or spreading complex subjects across multiple, shorter videos.";
+                }
+                else if (progress25>=vidCompletions*2){
+                    document.getElementById('q5suggestions').innerHTML="A substantial number of students that starts watching this video does not continue it. Consider creating a thought-provoking introduction to increase student engagement.A substantial number of students that starts watching this video does not continue it. Consider creating a thought-provoking introduction to increase student engagement.";
+                }
+                else if (vidCompletions>plays*0.5){
+                    document.getElementById('q5suggestions').innerHTML="Most students seem to maintain engagement in watching this video. Consider making more content of a similar format, length, or content.";
+                }
+                else{
+                    document.getElementById('q5suggestions').innerHTML="Student engagement with this video does not seem consistent. Consider making improvements to the length or content to further increase engagement.";
+                }
+
             }
 
 
@@ -318,7 +513,13 @@
 
 
 
+
+
+
+
+
         }
+
 
 
 </script>

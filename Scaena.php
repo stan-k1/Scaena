@@ -8,7 +8,10 @@
     <?php include('Elements\Imports.html') ?>
 
     <!--Functional Scripts-->
-    <script>var currentNavItem = "#navLinkHome"</script>
+    <script>
+        var currentNavItem = "#navLinkHome";
+        var setDatesToggled = false;
+    </script>
     <script>
         $(document).ready(function () {
             $("#query-output").hide();
@@ -18,13 +21,13 @@
         });
     </script>
     <script>
-        var retrieval_checker=setTimeout(function () {
-            if (document.getElementById("query_check").innerHTML==="Waiting For Data..."){
+        var retrieval_checker = setTimeout(function () {
+            if (document.getElementById("query_check").innerHTML === "Waiting For Data...") {
                 $("#no_login_message").show();
             }
-        },5000)
+        }, 6000)
     </script>
-    <?php include('Elements/ReportingApi.html')?>
+    <?php include('Elements/ReportingApi.html') ?>
 </head>
 
 <body>
@@ -44,7 +47,7 @@
             <video class="video-js vjs-theme-sea" controls="true" id="video_player"
                    poster="https://www.carbonbrief.org/wp-content/uploads/2019/09/Blue-green-sea-surface-background-with-fishes-full-frame-composition-DWGX61-420x280.jpg">
                 <source src="Assets/sea_video.mp4" type="video/mp4">
-<!--                <source src="//vjs.zencdn.net/v/oceans.webm" type="video/webm">-->
+                <!--                <source src="//vjs.zencdn.net/v/oceans.webm" type="video/webm">-->
             </video>
             <script src="https://vjs.zencdn.net/7.8.3/video.js"></script>
             <script src="videojs.ga.min.js"></script>
@@ -52,31 +55,33 @@
                 videojs('video_player', {}, function () {
                     this.ga(); // "load the plugin, by defaults tracks everything!!"
                 })
+                var vidPlayer = document.getElementById("video_player");
             </script>
         </div>
         <div class="col-xl-6 text-center">
             <h1>Quick Glance</h1>
             <h6>Performance overview for the last 30 days</h6>
-            <h6 id="no_login_message" style="display: none; color:darkred;"><i class="material-icons">error</i> No Data Retrieved. Please make sure you are logged in to Google Analytics.</h6>
-
-            <p class="analytics_detail"><i class="material-icons">done</i> Video Completions: </p>
-            <p class="analytics_detail" id="completions"> </p>
-            <br>
+            <h6 id="no_login_message" style="display: none; color:darkred;"><i class="material-icons">error</i> No Data
+                Retrieved. Please make sure you are logged in to Google Analytics.</h6>
 
             <p class="analytics_detail"><i class="material-icons">play_arrow</i> Video Plays: </p>
-            <p id="plays" class="analytics_detail"> </p>
+            <p id="plays" class="analytics_detail"></p>
+            <br>
+
+            <p class="analytics_detail"><i class="material-icons">done</i> Video Completions: </p>
+            <p class="analytics_detail" id="completions"></p>
             <br>
 
             <p class="analytics_detail"><i class="material-icons">remove_red_eye</i> Total Views: </p>
-            <p class="analytics_detail" id="views"> </p>
+            <p class="analytics_detail" id="views"></p>
             <br>
 
             <p class="analytics_detail"><i class="material-icons">web_asset</i> Total Sessions: </p>
-            <p class="analytics_detail"  id="sessions"> </p>
+            <p class="analytics_detail" id="sessions"></p>
             <br>
 
             <p class="analytics_detail"><i class="material-icons">person</i> Unique Visitors: </p>
-            <p class="analytics_detail"  id="visitors"> </p>
+            <p class="analytics_detail" id="visitors"></p>
 
             <!-- The Sign-in button. This will run `queryReports()` on success. -->
             <p class="g-signin2" data-onsuccess="queryReports"></p>
@@ -85,25 +90,28 @@
 </div>
 
 <?php $queries = array();
-echo($_SERVER['QUERY_STRING']);?>
+echo($_SERVER['QUERY_STRING']); ?>
 
-<h1>Content Analytics</h1>
-<p id="query_check" style="display: none">Waiting For Data...</p> <!-- Hidden Element that signifies whether data has query results have been printed-->
+<h1>Analytics</h1>
+<p id="query_check" style="display: none">Waiting For Data...</p>
+<!-- Hidden Element that signifies whether data has query results have been printed-->
 
 <div class="container">
-
 
 
     <div class="text-center">
         <div class="btn-group btn-group-toggle" data-toggle="buttons">
             <label class="btn btn-secondary active">
-                <input type="radio" name="data_range" id="30d" autocomplete="off" checked onclick="Query_Analytics('3daysAgo','today', false)">30 Days
+                <input type="radio" name="data_range" id="30d" autocomplete="off" checked
+                       onclick="Query_Analytics('30daysAgo','today', false)">30 Days
             </label>
             <label class="btn btn-secondary">
-                <input type="radio" name="data_range" id="365d" autocomplete="off" onclick="Query_Analytics('365daysAgo','today', false)">1 Year
+                <input type="radio" name="data_range" id="365d" autocomplete="off"
+                       onclick="Query_Analytics('365daysAgo','today', false)">1 Year
             </label>
             <label class="btn btn-secondary">
-                <input type="radio" name="data_range" id="infd" onclick="Query_Analytics('2010-01-01','today', false)">All Time
+                <input type="radio" name="data_range" id="infd" onclick="Query_Analytics('2010-01-01','today', false)">All
+                Time
             </label>
             <label class="btn btn-secondary">
                 <input type="radio" name="data_range" id="cusd" data-toggle="modal" data-target="#exampleModal"">Custom
@@ -112,7 +120,8 @@ echo($_SERVER['QUERY_STRING']);?>
     </div>
 
     <!-- Custom Data Range Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -123,26 +132,90 @@ echo($_SERVER['QUERY_STRING']);?>
                 </div>
                 <div class="modal-body">
                     <form onkeydown="return event.key !== 'Enter'">
-                        <label for="daysStart">Please enter the number of previous days to retrieve data from:</label><br>
+                        <label for="daysStart">Please enter the number of previous days to retrieve data
+                            from:</label><br>
                         <input type="text" class="form-control" id="daysStart" name="start"><br>
                     </form>
+                    <div id="setdates" style="display: none">
+                        <h6>Set Custom Dates</h6>
+                        <label for="startDate">Start Date:</label>
+                        <input type="date" class="form-control" id="startDate" name="startDate"><br>
+                        <label for="endDate">End Date:</label>
+                        <input type="date" class="form-control" id="endDate" name="endDate"><br>
+
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" onclick="customRange()" data-dismiss="modal">Get Data</button>
+                    <button type="button" class="btn btn-outline-danger float-right" data-dismiss="modal"
+                            onclick="cancelCustom()">Cancel
+                    </button>
+                    <button type="button" class="btn btn-secondary float-right" onclick="showSetDates()">Set Dates
+                    </button>
+                    <button type="button" class="btn btn-primary pull-right" onclick="customRange()"
+                            data-dismiss="modal">Get Data
+                    </button>
                 </div>
             </div>
         </div>
     </div>
-
     <script>
+        var setDatesToggled = false;
+
         function customRange() {
-            var days = document.getElementById("daysStart").value;
-            if(days==parseInt(days)){
-                daysString=days.concat("daysAgo");
-                Query_Analytics(daysString,'today', false)
+            if (setDatesToggled) {
+                var startDateVar = document.getElementById("startDate").value;
+                var endDateVar = document.getElementById("endDate").value;
+                var today = new Date();
+                today.setHours(0, 3, 0, 0);
+                var startDateDate = new Date(startDateVar);
+                var endDateDate = new Date(endDateVar);
+                if (startDateVar > endDateVar) {
+                    alert("Could not retrieve data. The end date cannot be set before the start date.");
+                    return;
+                }
+
+                console.log("Custom Start Date Set:" + startDateDate);
+                console.log("Custom End Date Set:" + endDateDate);
+
+                startDateVar = startDateDate - today;
+                console.log("Start Date Diff: " + startDateVar);
+                startDateVar = parseInt(Math.abs(startDateVar) / (1000 * 60 * 60 * 24));
+                console.log("Days Since Start Day: " + startDateVar);
+
+                endDateVar = endDateDate - today;
+                console.log("End Date Diff: " + endDateVar);
+                endDateVar = parseInt(Math.abs(endDateVar) / (1000 * 60 * 60 * 24));
+                console.log("Days Since Start Day: " + endDateVar);
+
+                setDatesToggled = false;
+                $("#setdates").hide();
+
+                startDateVar = startDateVar.toString().concat("daysAgo");
+                endDateVar = endDateVar.toString().concat("daysAgo");
+                console.log("Analytics Parameter Start Date:" + startDateVar);
+                console.log("Analytics Parameter End Date:" + endDateVar);
+                $("#daysStart").prop("disabled", false);
+                Query_Analytics(startDateVar, endDateVar, false);
+            } else {
+                var days = document.getElementById("daysStart").value;
+                if (days == parseInt(days)) {
+                    daysString = days.concat("daysAgo");
+                    Query_Analytics(daysString, 'today', false)
+                } else alert("Please enter a valid number.")
             }
-            else alert("Please enter a valid number.")
+        }
+
+        function showSetDates() {
+            $("#setdates").toggle();
+            setDatesToggled = !setDatesToggled;
+            if ($('#daysStart').is(':disabled')) {
+                $("#daysStart").prop("disabled", false);
+            } else $("#daysStart").prop("disabled", true);
+        }
+
+        function cancelCustom() {
+            $("#setdates").hide();
+            $("#daysStart").prop("disabled", false);
         }
     </script>
 
@@ -160,7 +233,7 @@ echo($_SERVER['QUERY_STRING']);?>
                         labels: ['Complete Watch', 'Partial Watch'],
                         datasets: [{
                             label: 'Complete and Partial Video Watches',
-                            data: [50,50],
+                            data: [50, 50],
                             backgroundColor: [
                                 'rgba(77, 124, 190, 0.7)',
                                 'rgba(244,231,211,0.7)',
@@ -173,11 +246,11 @@ echo($_SERVER['QUERY_STRING']);?>
                         }]
                     },
                     options: {
-                        responsive:true,
+                        responsive: true,
                         maintainAspectRatio: false,
                         tooltips: {
                             callbacks: {
-                                label: function(tooltipItem, data) {
+                                label: function (tooltipItem, data) {
                                     return data['labels'][tooltipItem['index']] + ': ' + data['datasets'][0]['data'][tooltipItem['index']] + '%';
                                 }
                             }
@@ -214,9 +287,9 @@ echo($_SERVER['QUERY_STRING']);?>
             var deviceChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: ['Desktop', 'Tablet','Mobile'],
+                    labels: ['Desktop', 'Tablet', 'Mobile'],
                     datasets: [{
-                        data: [33,33,33],
+                        data: [33, 33, 33],
                         backgroundColor: [
                             'rgba(77, 124, 190, 0.7)',
                             'rgba(244,231,211,0.7)',
@@ -231,12 +304,13 @@ echo($_SERVER['QUERY_STRING']);?>
                     }]
                 },
                 options: {
-                    responsive:true,
+                    responsive: true,
                     maintainAspectRatio: false,
                     legend: {
                         display: false
 
-                    }}
+                    }
+                }
             });
 
         </script>
@@ -266,44 +340,45 @@ echo($_SERVER['QUERY_STRING']);?>
 
 <!--Analytic: Plays, Pauses, Page Views-->
 <h2 class="analytic_heading">Plays, Pauses and Views </h2>
-    <div class="row">
-        <div class="col-xl-6 text-center" id="ppvChartDiv">
-            <canvas id="ppvChart" width="400" height="400"></canvas>
-            <script>
-                var ctx = document.getElementById('ppvChart').getContext('2d');
+<div class="row">
+    <div class="col-xl-6 text-center" id="ppvChartDiv">
+        <canvas id="ppvChart" width="400" height="400"></canvas>
+        <script>
+            var ctx = document.getElementById('ppvChart').getContext('2d');
 
-                var ppvChart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: ['Plays', 'Pauses','Views'],
-                        datasets: [{
-                            data: [33,33,33],
-                            backgroundColor: [
-                                'rgba(77, 124, 190, 0.7)',
-                                'rgba(244,231,211,0.7)',
-                                'rgba(31,78,95,0.7)',
-                            ],
-                            borderColor: [
-                                'rgba(77, 124, 190, 1)',
-                                'rgba(244,231,211)',
-                                'rgba(31,78,95)',
-                            ],
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        responsive:true,
-                        maintainAspectRatio: false,
-                        legend: {
-                            display: false
+            var ppvChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Plays', 'Pauses', 'Views'],
+                    datasets: [{
+                        data: [33, 33, 33],
+                        backgroundColor: [
+                            'rgba(77, 124, 190, 0.7)',
+                            'rgba(244,231,211,0.7)',
+                            'rgba(31,78,95,0.7)',
+                        ],
+                        borderColor: [
+                            'rgba(77, 124, 190, 1)',
+                            'rgba(244,231,211)',
+                            'rgba(31,78,95)',
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    legend: {
+                        display: false
 
-                        }}
-                });
+                    }
+                }
+            });
 
-            </script>
-        </div>
+        </script>
+    </div>
 
-        <div class="col-xl-6 text-center">
+    <div class="col-xl-6 text-center">
         <h3 wclass="suggestionsTitle">Overview</h3>
         <br>
 
@@ -326,9 +401,206 @@ echo($_SERVER['QUERY_STRING']);?>
 
 </div>
 
+<!--Analytic: TimeOnPage and Sessions-->
+<h2 class="analytic_heading">Time on Page and Sessions </h2>
+<div class="row">
+    <div class="col-xl-6 text-center" id="timeseChartDiv">
+        <canvas id="timeseChart" width="400" height="400"></canvas>
+        <script>
+            var ctx = document.getElementById('timeseChart').getContext('2d');
+
+            var timeseChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Page Time', 'Session Time', 'Sessions'],
+                    datasets: [{
+                        data: [33, 33, 33],
+                        backgroundColor: [
+                            'rgba(77, 124, 190, 0.7)',
+                            'rgba(244,231,211,0.7)',
+                            'rgba(31,78,95,0.7)',
+                        ],
+                        borderColor: [
+                            'rgba(77, 124, 190, 1)',
+                            'rgba(244,231,211)',
+                            'rgba(31,78,95)',
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    legend: {
+                        display: false
+
+                    }
+                }
+            });
+
+        </script>
+    </div>
+
+    <div class="col-xl-6 text-center">
+        <h3 wclass="suggestionsTitle">Overview</h3>
+        <br>
+
+        <p class="analytics_detail"><i class="material-icons">access_time</i> Average Time on Page: </p>
+        <span id="q4pagetime"> </span>
+        <br>
+        <br>
+
+        <p class="analytics_detail"><i class="material-icons">timeline</i> Average Session Duration: </p>
+        <span id="q4setime"> </span>
+        <br>
+        <br>
+
+        <p class="analytics_detail"><i class="material-icons">web_asset</i> Total Number of Sessions: </p>
+        <span id="q4sessions"> </span>
+
+        <h3 class="suggestionsTitle">Suggestions</h3>
+        <p id="q4suggestions" class="suggestions">Stand by..</p>
+    </div>
+
+</div>
+
+<!--Analytic: Video Progress-->
+<h2 class="analytic_heading">Video Progress Marks</h2>
+<div class="row">
+    <div class="col-xl-6 text-center" id="progChartDiv">
+        <canvas id="progChart" width="400" height="400"></canvas>
+        <script>
+            var ctx = document.getElementById('progChart').getContext('2d');
+
+            var progChart = new Chart(ctx, {
+                type: 'horizontalBar',
+                data: {
+                    labels: ['Play', '25%', '50%', '75%', 'Completion'],
+                    datasets: [{
+                        data: [33, 33, 33, 33, 33],
+                        backgroundColor: [
+                            'rgba(77, 124, 190, 0.7)',
+                            'rgba(244,231,211,0.7)',
+                            'rgba(31,78,95,0.7)',
+                            'rgba(8,129,163,0.7)',
+                            'rgba(13,13,13,0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(77, 124, 190, 1)',
+                            'rgba(244,231,211)',
+                            'rgba(31,78,95)',
+                            'rgba(8,129,163)',
+                            'rgba(13,13,13)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    legend: {
+                        display: false
+
+                    }
+                }
+            });
+
+        </script>
+    </div>
+
+    <div class="col-xl-6 text-center">
+        <h3 wclass="suggestionsTitle">Overview</h3>
+        <br>
+
+        <p class="analytics_detail"><span><i class="material-icons">play_arrow</i> Video Plays: </span>
+            <span id="q5plays"> </span>
+            <br>
+            <br>
+
+        <p class="analytics_detail"><i class="material-icons">star_border</i> 25% Completions: </p>
+        <span id="q5progress25"> </span>
+        <br>
+        <br>
+
+        <p class="analytics_detail"><i class="material-icons">star_half</i> 50% Completions: </p>
+        <span id="q5progress50"> </span>
+        <br>
+        <br>
+
+        <p class="analytics_detail"><i class="material-icons">star</i> 75% Completions: </p>
+        <span id="q5progress75"> </span>
+        <br>
+        <br>
+
+        <p class="analytics_detail"><i class="material-icons">check</i> Video Completions: </p>
+        <span id="q5completions"> </span>
+
+        <h3 class="suggestionsTitle">Suggestions</h3>
+        <p id="q5suggestions" class="suggestions">Stand by..</p>
+    </div>
+
+</div>
+
+<!--Analytic: Exit Rate-->
+<h2 class="analytic_heading">Exit Rate</h2>
+<div class="row">
+    <div class="col-xl-6 text-center" id="CompletionsChart">
+        <canvas id="exitChart" width="400" height="400"></canvas>
+        <script>
+            var ctx = document.getElementById('exitChart').getContext('2d');
+
+            var exitChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Exit', 'Non-Exit'],
+                    datasets: [{
+                        label: 'Complete and Partial Video Watches',
+                        data: [50, 50],
+                        backgroundColor: [
+                            'rgba(77, 124, 190, 0.7)',
+                            'rgba(244,231,211,0.7)',
+                        ],
+                        borderColor: [
+                            'rgba(77, 124, 190, 1)',
+                            'rgba(244,231,211)',
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    tooltips: {
+                        callbacks: {
+                            label: function (tooltipItem, data) {
+                                return data['labels'][tooltipItem['index']] + ': ' + data['datasets'][0]['data'][tooltipItem['index']] + '%';
+                            }
+                        }
+                    }
+                }
+            });
+
+        </script>
+    </div>
+
+    <div class="col-xl-6 text-center">
+        <h3 wclass="suggestionsTitle">Overview</h3>
+        <br>
+        <span><i class="material-icons">exit_to_app</i> Exit Rate: </span>
+        <span id="q6exitrate"> </span>
+        <br>
+        <br>
+        <span><i class="material-icons">double_arrow</i> Non-Exit Rate: </span>
+        <span id="q6nonexitrate"> </span>
+        <h3 class="suggestionsTitle">Suggestions</h3>
+        <p id="q6suggestions" class="suggestions">Stand by..</p>
+    </div>
+</div>
+</div>
+
 
 <button class="inpage_button" id="responseToggle">Show Analytics Response (Advanced)</button>
-<a href="#" name="button1" onclick="dataLayer.push({'event': 'button1-click'});" >Button 1</a>
+<a href="#" name="button1" onclick="dataLayer.push({'event': 'button1-click'});">Button 1</a>
 
 <!-- The API response will be printed here. -->
 <textarea cols="80" rows="20" id="query-output"></textarea>
