@@ -1,6 +1,8 @@
 body{
     max-width: 1600px;
     margin: auto;
+    font-family: Roboto, sans-serif;
+    background-size: cover;
 }
 
 #video_player{
@@ -8,6 +10,11 @@ body{
     width:600px;
     margin:auto;
     margin-top: 20px;
+}
+
+.row{
+    margin-left: 20px;
+    margin-right: 20px;
 }
 
 .navigation_bar{
@@ -25,6 +32,8 @@ h1{
     padding-top:20px;
     padding-bottom: 20px;
     margin:auto;
+    font-weight: 600;
+    font-family: "Open Sans", sans-serif;
 }
 
 h2{
@@ -32,6 +41,7 @@ h2{
     padding-top:20px;
     padding-bottom: 20px;
     margin:auto;
+    font-family: "Open Sans", sans-serif;
 }
 
 h3{
@@ -39,6 +49,14 @@ h3{
     padding-top:10px;
     padding-bottom: 10px;
     margin:auto;
+}
+
+h4{
+    text-align: center;
+    padding-top:10px;
+    padding-bottom: 10px;
+    margin:auto;
+    font-family: "Open Sans", sans-serif;
 }
 
 h6{
@@ -49,10 +67,13 @@ h6{
 .g-signin2{
     margin: auto;
     width: 100%;
+    position: absolute;
+    bottom: 40px;
 }
 
 .g-signin2 > div{
     margin: 0 auto;
+
 }
 
 textarea{
@@ -92,7 +113,13 @@ i{
 
 
 canvas{
-    margin-left: 50px;
+    /*margin-top:50px;*/
+
+    margin-right: 50px;
+}
+
+#progChart{
+    margin-left: -0px;
 }
 
 .vjs-play-progress {
@@ -105,6 +132,7 @@ canvas{
 
 .suggestions{
     max-width: 500px !important;
+    margin-bottom: 20px;
 }
 
 .suggestionsTitle{
@@ -130,7 +158,77 @@ canvas{
 }
 
 .analytic_heading{
-    margin-top:40px;
+    margin-top:50px;
+    margin-bottom:20px;
 }
+
+#histHeading{
+    margin-top: 40px;
+}
+
+#contentHeading {
+    margin-top: -10px !important;
+}
+
+
+@media only screen and (max-width: 1200px) {
+    .g-signin2 {
+        position: relative;
+        padding-top: 20px;
+    }
+}
+
+#registerBlock {
+    display: block; !important;
+    margin: auto; !important;
+    margin-top: 100px;
+    background-color: white;
+    border: 2px solid grey;
+    border-radius: 4px;
+    border-collapse: separate;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+#signinBlock {
+    display: block; !important;
+    margin: auto; !important;
+    margin-top: 100px;
+    background-color: white;
+    border: 2px solid grey;
+    border-radius: 4px;
+    border-collapse: separate;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#errorBlock{
+    display: block; !important;
+    margin: auto; !important;
+    margin-top: 150px;
+    background-color: white;
+    border: 2px solid grey;
+    border-radius: 4px;
+    border-collapse: separate;
+    padding-left: 30px;
+    padding-right: 30px;
+    text-align: center;
+    min-height: 400px;
+    min-width: 100px;
+}
+
+#errorIcon{
+    margin-top: 10px;
+}
+
+/*.row{*/
+/*    background-color: #fcfbf7 ;*/
+/*}*/
 
 
