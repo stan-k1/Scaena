@@ -2,7 +2,14 @@ body{
     max-width: 1600px;
     margin: auto;
     font-family: Roboto, sans-serif;
-    background-size: cover;
+    background-attachment:fixed;
+    background-repeat:no-repeat;
+    background-position:center center;
+    background-size:cover;
+}
+
+.navbar-light .navbar-nav .nav-link{
+    color: #0881a3;
 }
 
 #video_player{
@@ -227,8 +234,11 @@ canvas{
     margin-top: 10px;
 }
 
-/*.row{*/
-/*    background-color: #fcfbf7 ;*/
-/*}*/
+#usersTable {
+    margin-top: 16px;
+}
 
+th{
+    background-color: #F4E7D3;
+}
 

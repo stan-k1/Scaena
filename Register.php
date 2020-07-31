@@ -31,13 +31,6 @@ if(isset($_POST["reg_username"]) && $_POST["reg_password"]==$_POST["reg_password
     }
 }
 
-function stringSantizer($var)
-{
-    $var = htmlentities($var);
-    $var = strip_tags($var);
-    return $var;
-}
-
 ?>
 
 <!DOCTYPE html>
@@ -45,7 +38,7 @@ function stringSantizer($var)
 <head>
     <?php include('Elements\Imports.html') ?>
     <meta charset="UTF-8">
-    <title>Sceana | Regiser</title>
+    <title>Register | Sceana</title>
     <style type="text/css">
         body{ font: 14px sans-serif; }
         .wrapper{ width: 350px; padding: 20px; }

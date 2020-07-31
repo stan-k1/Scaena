@@ -1,6 +1,7 @@
 <!--Initialize Database Connection and Variables-->
 <?php
 include_once('Elements\dbConnector.php');
+session_start();
 
 //Retrieves the video based on the url (GET), defaults to the sea test video
 //E.g. Scaena.php?view=sea_video.mp4 loads the Scaena.php page with sea_video.mp4
@@ -16,21 +17,35 @@ else{
     $querry=$conn->query("SELECT * FROM content where filename='".$view."'");
 }
 
+//Get video details from database
 $querry_output=$querry->fetch_assoc();
 $c_filename=$querry_output["filename"];
 $short_desc=$querry_output["short_desc"];
 $poster=$querry_output["poster"];
-echo $c_filename;
+$access=$querry_output["access_level"];
+$uploader=$querry_output['uploader'];
 
-//DEBUG: Show all rows retrieved by MySQL
-//if ($querry->num_rows > 0) {
-//    // output data of each row
-//    while($row = $querry->fetch_assoc()) {
-//        echo "Filename: " . $row["c_filename"]. "<br>". "short_desc: " . $row["short_desc"];
-//    }
-//} else {
-//    echo "0 results";
-//}
+
+//Access Control
+if (!is_null($access)) {
+    if ($access == "private") {
+        echo " private if ";
+        $username = $_SESSION['username'];
+        $user_querry = $conn->query("SELECT * FROM users where username='$username'");
+        $user_querry_output = $user_querry->fetch_assoc();
+        $user_type = $user_querry_output['type'];
+        if ($user_type != 'admin' && $username != $uploader) {
+            $_SESSION['cust_error_msg'] = "You are not authorized to see this page. If you believe this is an error, please contact your administrator.";
+            header('Location: Error.php');
+        }
+    } else if ($access == "protected") {
+        if (!isset($_SESSION['username'])) {
+            $_SESSION['cust_error_msg'] = "You are not authorized to see this page. Please sign in to proceed.";
+            header('Location: Error.php');
+        }
+    }
+
+}
 
 $conn->close()
 ?>

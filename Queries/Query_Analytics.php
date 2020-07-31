@@ -507,11 +507,11 @@
 
             //q5- Additional SUggetsions
             if (progress50 == progress25) { //CHNAGE THIS BACK
-                document.getElementById('q5suggestions_additional').innerHTML = "In addition, a large number of students skip the introduction of this video. Consider making shorter or more concise intros to retain student interest."
+                $('#q5suggestions').append("<br> In addition, a large number of students skip the introduction of this video. Consider making shorter or more concise intros to retain student interest.");
             } else if (progress50 > vidCompletions) {
-                document.getElementById('q5suggestions_additional').innerHTML = "In addition, many students watch this video to the half point mark but do not complete it. Consider decreasing content length, making more concise points or otherwise making modifications to maintain student interest.Many students watch this video to the half point mark but do not complete it. Consider decreasing content length, making more concise points or otherwise making modifications to maintain student interest.";
+                $('#q5suggestions').append("<br> In addition, many students watch this video to the half point mark but do not complete it. Consider decreasing content length to maintain student interest.");
             } else if (progress25 > progress50 && progress75 > progress50) {
-                document.getElementById('q5suggestions_additional').innerHTML = "In addition, many students that watch this video, skip the middle portion, consider making more condense content to retain student engagement throughout the duration of the content.";
+                $('#q5suggestions').append("<br> In addition, many students that watch this video, skip the middle portion, consider making more condense or engaging content to retain student engagement throughout the duration of the video.");
             }
 
         }

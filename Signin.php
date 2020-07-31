@@ -1,19 +1,25 @@
 <?php
 session_start();
 include_once('Elements\dbConnector.php');
+$_SESSION['signin_failed']=false;
 
-//DEBUG: Write the Post array
-//foreach ($_POST as $postElement){
-//    echo ($postElement);
-//    echo("<br>");
-//}
-
-function stringSantizer($var)
-{
-    $var = htmlentities($var);
-    $var = strip_tags($var);
-    return $var;
+if(isset($_POST['username'])){
+$username=$_POST['username'];
+$check_querry_str="SELECT username, password from users WHERE username='$username'";
+$check_querry=$conn->query($check_querry_str);
+if ($check_querry->num_rows > 0){
+    $signin_password=$_POST['signin_password'];
+    $user_details=$check_querry -> fetch_row();
+    if($signin_password==$user_details[1]){
+        $_SESSION['username']=$username;
+        if($_SESSION['signin_failed']) {$_SESSION['signin_failed']=false;}
+        header('Location: Scaena.php');
+    }
+    else {$_SESSION['signin_failed']=true;}
 }
+else {$_SESSION['signin_failed']=true;}
+}
+
 
 ?>
 
@@ -22,10 +28,13 @@ function stringSantizer($var)
 <head>
     <?php include('Elements\Imports.html') ?>
     <meta charset="UTF-8">
-    <title>Sceana | Regiser</title>
+    <title>Sign in | Sceana</title>
     <style type="text/css">
         body{ font: 14px sans-serif; }
         .wrapper{ width: 350px; padding: 20px; }
+         body{
+             background-image: url('Assets/Backgrounds/background19.jpg');
+         }
     </style>
 </head>
 <body>
@@ -35,14 +44,15 @@ function stringSantizer($var)
         <img src="Assets/scaena_logo_transparent.png" alt="Scaena" width="200" height="120" class="center">
         <h2>Sign in</h2>
         <br>
+        <?php if($_SESSION['signin_failed']){echo("<p style='color: darkred; font-weight: bold'>Incorrect username or password. Please try again. </p> <br>");}?>
         <form action="Signin.php" method="post">
             <div class="form-group">
                 <label>Username:</label>
-                <input type="text" name="reg_username" class="form-control" required>
+                <input type="text" name="username" class="form-control" required>
             </div>
             <div class="form-group">
                 <label>Password:</label>
-                <input type="password" name="reg_password" class="form-control" required>
+                <input type="password" name="signin_password" class="form-control" required>
             </div>
             <div class="form-group">
                 <input type="submit" class="btn btn-primary" value="Submit">
