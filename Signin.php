@@ -4,7 +4,7 @@ include_once('Elements\dbConnector.php');
 $_SESSION['signin_failed']=false;
 
 if(isset($_POST['username'])){
-$username=$_POST['username'];
+$username=stringSanitizer($_POST['username']);
 $check_querry_str="SELECT username, password from users WHERE username='$username'";
 $check_querry=$conn->query($check_querry_str);
 if ($check_querry->num_rows > 0){

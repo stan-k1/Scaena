@@ -11,9 +11,11 @@ if ($conn->connect_error) {
 }
 $conn->select_db("scaena");
 
-/* DEBUG: return name of current default database */
-//if ($result = $conn->query("SELECT DATABASE()")) {
-//    $row = $result->fetch_row();
-//    printf("Default database is %s.\n", $row[0]);
-//    $result->close();
-//}
+function stringSanitizer($var)
+{
+    $var = htmlentities($var);
+    $var = strip_tags($var);
+    return $var;
+}
+
+?>
