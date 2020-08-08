@@ -19,6 +19,13 @@ body{
     margin-top: 20px;
 }
 
+#video_player_large{
+    height: 600px;
+    width:900px;
+    margin:auto;
+    margin-top: 20px;
+}
+
 .row{
     margin-left: 20px;
     margin-right: 20px;
@@ -248,7 +255,19 @@ th{
 }
 
 #confimration_banner{
-    background-color: greenyellow;
+    background-color: #09db09;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+#rejection_banner{
+    background-color: #cd1c1c;
+    color: white;
     font-size: 16px;
     font-weight: bold;
     padding-top: 10px;
@@ -260,4 +279,38 @@ th{
 #mngUsersLinkDiv{
     text-align: center;
     margin-top: 20px;
+}
+
+.optionsMenuLink{
+    margin-left: 32px;
+    font-size: 24px;
+    color: black;
+}
+
+.optionsMenuItem{
+    margin: auto;
+    width: 95%;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    margin-bottom: 18px;
+}
+
+.font-icon-upped{
+    position: relative;
+    top: -3px;
+}
+
+#cont_desc{
+    margin-top: 32px;
+    max-width: 800px;
+}
+
+.uploadLabel{
+    margin-bottom: 4px;
+    text-align: left;
+}
+
+#uploadContainer{
+    width: 95%;
 }

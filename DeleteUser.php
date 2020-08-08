@@ -9,7 +9,7 @@ if (isset($_SESSION['username'])) {
     $check_querry = $conn->query($check_querry_str);
     $check_querry_output = $check_querry->fetch_assoc();
     $user_type = $check_querry_output['type'];
-    if ($user_type != 'admin') {
+    if ($user_type != 'admin' && $username!= $_GET['user']) {
         $_SESSION['cust_error_msg'] = "You are not authorized to see this page. If you believe this is an error, please contact your administrator.";
         header('Location: Error.php');
     }

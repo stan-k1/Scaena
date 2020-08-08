@@ -1,4 +1,3 @@
-<!--Initialize Database Connection and Variables-->
 <?php
 include_once('Elements\dbConnector.php');
 session_start();

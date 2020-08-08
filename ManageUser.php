@@ -53,25 +53,24 @@ $userManaged_last_name = $manage_query['last_name'];
 $userManaged_email = $manage_query['email'];
 $userManaged_type = $manage_query['type'];
 
+$conn->close();
 ?>
 
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
+    <?php include('Elements/Imports.html') ?>
     <title>Manage User | Scaena</title>
     <script>
-        function enable(element){
-            element.preventDefault();
-            $('.inputDisabled').prop("disabled", false);
+        var currentNavItem = "#navLinkOptions";
     </script>
 </head>
 <body>
-<?php include('Elements/Imports.html') ?>
 <?php include('Elements/header.html') ?>
 <h1>Manage User | <?php echo($userManaged_first_name.' '.$userManaged_last_name.' ('.$userManaged.')') ?></h1>
 <h6>Edit User Details and Privileges</h6>
 
-<form action="Manage.php?user=<?php echo($userManaged) ?>" method="POST">
+<form action="ManageUser.php?user=<?php echo($userManaged) ?>" method="POST">
     <div class="form-group row">
         <label for="mng_username" class="col-sm-1 col-form-label">Username: </label>
         <div class="col-sm-11">
@@ -140,7 +139,7 @@ $userManaged_type = $manage_query['type'];
 </form>
 
 <div id="mngUsersLinkDiv">
-    <a href="Manage.php">Manage Users</a>
+    <a href="Users.php">Manage Users</a>
     <span> | </span>
     <a href="DeleteUser.php?user=<?php echo($userManaged)?>">Delete User</a>
 </div>

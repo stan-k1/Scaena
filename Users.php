@@ -20,7 +20,7 @@ else{
 }
 
 if (isset($_GET['username_input'])){
-    header('Location: Manage.php?user='.$_GET['username_input']);
+    header('Location: ManageUser.php?user='.$_GET['username_input']);
 }
 
 $users_query_str="SELECT username, email, first_name, last_name, type from users";
@@ -34,6 +34,7 @@ $rows = $users_query->num_rows;
     <title>Manage Users | Scaena</title>
     <?php include('Elements\Imports.html') ?>
     <script>
+        var currentNavItem = "#navLinkOptions";
         function selectUser(username) {
             document.getElementById('username_input').value=username;
             document.getElementById("userSelectionForm").submit();
@@ -70,7 +71,7 @@ for ($j = 0 ; $j < $rows ; ++$j)
 }
 
 echo ("</table>");
-
+$conn->close();
 ?>
 
 <form action="Users.php" id="userSelectionForm">
