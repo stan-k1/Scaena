@@ -18,4 +18,13 @@ function stringSanitizer($var)
     return $var;
 }
 
+if(isset($_SESSION['username'])){
+    $username = $_SESSION['username'];
+    $check_querry_str = "SELECT type from users WHERE username='$username'";
+    $check_querry = $conn->query($check_querry_str);
+    $check_querry_output = $check_querry->fetch_assoc();
+    $user_type = $check_querry_output['type'];
+
+}
+
 ?>

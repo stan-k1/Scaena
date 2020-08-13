@@ -1,6 +1,7 @@
 <?php
-include_once('Elements\dbConnector.php');
 session_start();
+include_once('Elements\dbConnector.php');
+
 if (isset($_SESSION['username'])) {
     $username = $_SESSION['username'];
     $user_querry_str = "SELECT type from users WHERE username='$username'";
@@ -10,6 +11,7 @@ if (isset($_SESSION['username'])) {
     if ($user_type == 'admin') {
         $isAdmin = true;
     }
+    else {$isAdmin=false;}
 } else {
     $_SESSION['cust_error_msg'] = "You are not authorized to see this page. Please sign in to proceed.";
     header('Location: Error.php');
@@ -27,7 +29,7 @@ $conn->close();
     </script>
 </head>
 <body>
-<?php include_once('Elements/Header.html') ?>
+<?php include_once('Elements/Header.php') ?>
 
 <?php
 if ($isAdmin) {
@@ -36,6 +38,10 @@ if ($isAdmin) {
     echo '</div>';
 }
 ?>
+
+<div class="optionsMenuItem">
+    <a class="optionsMenuLink" href="Signout.php"><i class="material-icons font-icon-upped">logout</i> Sign Out</a>
+</div>
 
 <div class="optionsMenuItem">
     <a class="optionsMenuLink" href="DeleteUser.php?user=<?php echo($username)?>"><i class="material-icons font-icon-upped">delete_forever</i> Delete Your Account</a>

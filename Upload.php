@@ -1,8 +1,22 @@
 <?php
-include_once('Elements\dbConnector.php');
 session_start();
+include_once('Elements\dbConnector.php');
 
-
+//Access Control
+if (isset($_SESSION['username'])) {
+    $username = $_SESSION['username'];
+    $check_querry_str = "SELECT type from users WHERE username='$username'";
+    $check_querry = $conn->query($check_querry_str);
+    $check_querry_output = $check_querry->fetch_assoc();
+    $user_type = $check_querry_output['type'];
+    if ($user_type != 'admin' && $user_type != 'mod') {
+        $_SESSION['cust_error_msg'] = "You are not authorized to see this page. If you believe this is an error, please contact your administrator.";
+        header('Location: Error.php');
+    }
+} else {
+    $_SESSION['cust_error_msg'] = "You are not authorized to see this page. Please sign in to proceed.";
+    header('Location: Error.php');
+}
 
 //Upload Script For Video
 $uploadOk = 1;
@@ -30,13 +44,11 @@ if(isset($_POST["submit"])) {
         $uploadOk = 0;
     }
 
-// Check if $uploadOk is set to 0 by an error
-    if ($uploadOk == 0) {
-        echo ("<p id='rejection_banner'>✘ An error occurred while uploading your file. Please try again.</p>");
 // if everything is ok, try to upload file
-    } else {
+    if($uploadOk==1) {
         if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
             //If Video Uplad is OK, start trying to upload the poster.
+            $filename = $_FILES['fileToUpload']['name'];
             $target_dir = "Assets/Content/";
             $target_file = $target_dir . basename($_FILES["posterToUpload"]["name"]);
             $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
@@ -53,13 +65,20 @@ if(isset($_POST["submit"])) {
 
             if ($uploadOk==1 && move_uploaded_file($_FILES["posterToUpload"]["tmp_name"], $target_file)) {
                 //If poster has also been uploaded,apply total of changes to database.
-                $conn->prepare("INSERT INTO content (filename, uploader, short_desc, cont_desc, poster, title, access_level) VALUES ( ?,?,?,?,?,?,?)");
+                $upload_query=$conn->prepare("INSERT INTO content (filename, uploader, short_desc, cont_desc, poster, title, access_level, upload_date) VALUES ( ?,?,?,?,?,?,?,?)");
                 $uploader = $_SESSION['username'];
-                $filename = $_FILES['fileToUpload']['name'];
-                echo $filename;
+                $poster_filename = $_FILES['posterToUpload']['name'];
+                $short_desc = $_POST['shortDesc'];
+                $cont_desc = $_POST['compDesc'];
+                $cont_title = $_POST['contTitle'];
+                $access_level = $_POST['accessLevelRadio'];
+                $upload_date=date("Y-m-d");
+                $upload_query->bind_param("ssssssss", $filename, $uploader, $short_desc, $cont_desc, $poster_filename, $cont_title, $access_level, $upload_date);
+                $upload_query->execute();
                 echo("<p id='confimration_banner'>✔ The file " . basename($_FILES["fileToUpload"]["name"]) . " has been uploaded.<p>");
             }
             else{
+                unlink("Assets/Content/$filename");
                 echo ("<p id='rejection_banner'>✘ An error occurred while uploading your file. Please try again.</p>");
             }
         } else {
@@ -67,6 +86,8 @@ if(isset($_POST["submit"])) {
         }
     }
 }
+
+$conn->close();
 ?>
 
 <html lang="en" xmlns="http://www.w3.org/1999/html">
@@ -84,9 +105,9 @@ if(isset($_POST["submit"])) {
 </head>
 
 <body>
-<?php include('Elements\Header.html'); ?>
+<?php include('Elements\Header.php'); ?>
 
-<div class="container mt-12" id="uploadContainer">
+<div class="container mt-12 restrictingContainer">
     <h2>Upload Video</h2>
     <p>Select content to upload. Videos must be in the MP4 format. Posters can be in JPEG/JPG or PNG format.</p>
     <br>
@@ -104,18 +125,31 @@ if(isset($_POST["submit"])) {
         </div>
 
         <div class="form-group">
+            <label>Video Title:</label>
+            <input type="text" name="contTitle" class="form-control" maxlength="90">
+        </div>
+
+        <div class="form-group">
             <label>Short Description:</label>
             <input type="text" name="shortDesc" class="form-control" maxlength="90">
         </div>
 
         <div class="form-group">
             <label>Complete Description:</label>
-            <textarea class="form-control" id="compDesc" rows="5"></textarea>
+            <textarea class="form-control" id="compDesc" name="compDesc" rows="5"></textarea>
+        </div>
+
+        <div class="form-group">
+        <p class="uploadLabel">Access Level: </p>
+            <label class="radio-inline radio-inline-spaced"><input type="radio" name="accessLevelRadio" value="public" checked> Public</label>
+            <label class="radio-inline radio-inline-spaced"><input type="radio" name="accessLevelRadio" value="protected"> Protected</label>
+            <label class="radio-inline radio-inline-spaced"><input type="radio" name="accessLevelRadio" value="private"> Private</label>
         </div>
 
         <div class="mt-3">
             <button type="submit" class="btn btn-primary" name="submit">Upload</button>
         </div>
+
     </form>
 </div>
 

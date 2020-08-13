@@ -1,6 +1,7 @@
 <?php
 session_start();
 include_once('Elements\dbConnector.php');
+
 $_SESSION['exists']=false;
 $_SESSION['nomatch']=false;
 

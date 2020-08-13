@@ -13,14 +13,14 @@ if ($check_querry->num_rows > 0){
     if($signin_password==$user_details[1]){
         $_SESSION['username']=$username;
         if($_SESSION['signin_failed']) {$_SESSION['signin_failed']=false;}
-        header('Location: Scaena.php');
+        header('Location: Analyze.php');
     }
     else {$_SESSION['signin_failed']=true;}
 }
 else {$_SESSION['signin_failed']=true;}
 }
 
-
+$conn->close();
 ?>
 
 <!DOCTYPE html>
