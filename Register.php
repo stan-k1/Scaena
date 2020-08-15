@@ -1,6 +1,6 @@
 <?php
 session_start();
-include_once('Elements\dbConnector.php');
+include_once('Controller/Elements/dbConnector.php');
 
 $_SESSION['exists']=false;
 $_SESSION['nomatch']=false;
@@ -35,7 +35,7 @@ if(isset($_POST["reg_username"])){
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <?php include('Elements\Imports.html') ?>
+    <?php include('Controller/Elements/Imports.html') ?>
     <meta charset="UTF-8">
     <title>Register | Sceana</title>
     <style type="text/css">
@@ -44,10 +44,10 @@ if(isset($_POST["reg_username"])){
     </style>
 </head>
 <body>
-<?php include_once('Elements/getBackground.php') ?>
+<?php include_once('Controller/Elements/getBackground.php') ?>
 <div class="row" style="position: relative">
 <div class="wrapper" id="registerBlock">
-    <img src="Assets/scaena_logo_transparent.png" alt="Scaena" width="200" height="120" class="center">
+    <img src="Model/Assets/scaena_logo_transparent.png" alt="Scaena" width="200" height="120" class="center">
     <h2>Register</h2>
     <p>Create a new account.</p>
     <br>
@@ -89,7 +89,7 @@ if(isset($_POST["reg_username"])){
             <input type="reset" class="btn btn-default" value="Reset">
         </div>
 
-        <p>Already have an account? <a href="login.php">Login here</a>.</p>
+        <p>Already have an account? <a href="Signin.php">Login here</a>.</p>
     </form>
 </div>
 </div>

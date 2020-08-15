@@ -44,7 +44,7 @@
                                             "operator": "PARTIAL",
                                             "dimensionName": "ga:pagePath",
                                             "expressions": [
-                                                "/Scaena/Analyze.php"
+                                                "<?php echo('/Scaena/Watch.php?view='.$c_filename) ?>"
                                             ]
                                         }
                                     ]
@@ -135,7 +135,7 @@
                                             "operator": "PARTIAL",
                                             "dimensionName": "ga:pagePath",
                                             "expressions": [
-                                                "/Scaena/Analyze.php"
+                                                "<?php echo('/Scaena/Watch.php?view='.$c_filename) ?>"
                                             ]
                                         }
                                     ]
@@ -177,7 +177,7 @@
                                         "operator": "PARTIAL",
                                         "dimensionName": "ga:pagePath",
                                         "expressions": [
-                                            "/Scaena/Analyze.php"
+                                            "<?php echo('/Scaena/Watch.php?view='.$c_filename) ?>"
                                         ]
                                     }
                                 ]
@@ -246,7 +246,7 @@
                                         "operator": "PARTIAL",
                                         "dimensionName": "ga:pagePath",
                                         "expressions": [
-                                            "/Scaena/Analyze.php"
+                                            "<?php echo('/Scaena/Watch.php?view='.$c_filename) ?>"
                                         ]
                                     }
                                 ]
@@ -316,7 +316,7 @@
                                         "operator": "PARTIAL",
                                         "dimensionName": "ga:pagePath",
                                         "expressions": [
-                                            "/Scaena/Analyze.php"
+                                            "<?php echo('/Scaena/Watch.php?view='.$c_filename) ?>"
                                         ]
                                     }
                                 ]
@@ -374,7 +374,7 @@
                                         "operator": "PARTIAL",
                                         "dimensionName": "ga:pagePath",
                                         "expressions": [
-                                            "/Scaena/Analyze.php"
+                                            "<?php echo('/Scaena/Watch.php?view='.$c_filename) ?>"
                                         ]
                                     }
                                 ]
@@ -419,7 +419,7 @@
                                         "operator": "PARTIAL",
                                         "dimensionName": "ga:pagePath",
                                         "expressions": [
-                                            "<?php echo('/Scaena/Analyze.php') ?>"
+                                            "<?php echo('/Scaena/Watch.php?view='.$c_filename) ?>"
                                         ]
                                     }
                                 ]
@@ -464,7 +464,7 @@
                                         "operator": "PARTIAL",
                                         "dimensionName": "ga:pagePath",
                                         "expressions": [
-                                            "/Scaena/Analyze.php"
+                                            "<?php echo('/Scaena/Watch.php?view='.$c_filename) ?>"
                                         ]
                                     }
                                 ]

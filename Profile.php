@@ -9,17 +9,13 @@ if (isset($_SESSION['username'])) {
     $check_querry = $conn->query($check_querry_str);
     $check_querry_output = $check_querry->fetch_assoc();
     $user_type = $check_querry_output['type'];
-    if ($user_type != 'admin') {
-        $_SESSION['cust_error_msg'] = "You are not authorized to see this page. If you believe this is an error, please contact your administrator.";
-        header('Location: Error.php');
-    }
 } else {
     $_SESSION['cust_error_msg'] = "You are not authorized to see this page. Please sign in to proceed.";
     header('Location: Error.php');
 }
 
-//Retrieve the username of the user to manage from the url parameter
-$userManaged = $_GET['user'];
+//Retrieve the username of the user to manage from session
+$userManaged = $username;
 //Updates the username var in session if the user has changed his own username so that access to the site can continue without loggin in again
 if (isset($_POST['mng_username'])) {
     if($userManaged==$_SESSION['username']) $_SESSION['username']= $_POST['mng_username'];
@@ -32,9 +28,8 @@ if (isset($_POST['mng_username'])) {
     $updated_first_name = $_POST["mng_first_name"];
     $updated_last_name = $_POST["mng_last_name"];
     $updated_email = $_POST["mng_email"];
-    $updated_type = $_POST["mng_type"];
     $user_edit_query_str = "UPDATE Users SET username='$updated_username', password='$updated_password', first_name='$updated_last_name', 
-     last_name='$updated_last_name', type='$updated_type', email='$updated_email' WHERE username='$userManaged'";
+     last_name='$updated_last_name', email='$updated_email' WHERE username='$userManaged'";
     $check_querry = $conn->query($user_edit_query_str);
     $_POST['mng_username']=null;
     $_GET['user']=$updated_username;
@@ -43,7 +38,7 @@ if (isset($_POST['mng_username'])) {
 }
 
 //Retrieve Managed User Details
-$manage_query_str = "SELECT username, password, email, first_name, last_name, type from users WHERE username='$userManaged'";
+$manage_query_str = "SELECT username, password, email, first_name, last_name from users WHERE username='$userManaged'";
 $manage_query = $conn->query($manage_query_str);
 $manage_query = $manage_query->fetch_assoc();
 if (!$manage_query) {
@@ -55,7 +50,6 @@ $userManaged_password = $manage_query['password'];
 $userManaged_first_name = $manage_query['first_name'];
 $userManaged_last_name = $manage_query['last_name'];
 $userManaged_email = $manage_query['email'];
-$userManaged_type = $manage_query['type'];
 
 $conn->close();
 ?>
@@ -64,17 +58,17 @@ $conn->close();
 <html lang="en">
 <head>
     <?php include('Controller/Elements/Imports.html') ?>
-    <title>Manage User | Scaena</title>
+    <title>Profile | Scaena</title>
     <script>
         var currentNavItem = "#navLinkOptions";
     </script>
 </head>
 <body>
 <?php include('Controller/Elements/header.php') ?>
-<h1>Manage User | <?php echo($userManaged_first_name.' '.$userManaged_last_name.' ('.$userManaged.')') ?></h1>
-<h6>Edit User Details and Privileges</h6>
+<h1>Edit Your Profile</h1>
+<h6>Update your user profile details</h6>
 
-<form action="ManageUser.php?user=<?php echo($userManaged) ?>" method="POST">
+<form action="Profile.php" method="POST">
     <div class="form-group row">
         <label for="mng_username" class="col-sm-1 col-form-label">Username: </label>
         <div class="col-sm-11">
@@ -110,42 +104,14 @@ $conn->close();
         </div>
     </div>
 
-    <div class="form-group row" id="mng_user_form">
-        <label for="mng_password" class="col-sm-1 col-form-label">User Type: </label>
-        <div class="col-sm-11">
-            <div class="form-check-inline">
-                <input class="form-check-input" type="radio" name="mng_type" id="mng_type1" value="user" required
-                <?php if($userManaged_type=='user') echo('checked'); ?> >
-                <label class="form-check-label" for="exampleRadios1">
-                    Student
-                </label>
-            </div>
-            <div class="form-check-inline">
-                <input class="form-check-input" type="radio" name="mng_type" id="mng_type2" value="mod"
-                    <?php if($userManaged_type=='mod') echo('checked'); ?> >
-                <label class="form-check-label" for="exampleRadios2">
-                    Faculty
-                </label>
-            </div>
-            <div class="form-check-inline">
-                <input class="form-check-input" type="radio" name="mng_type" id="mng_type3" value="admin"
-                <?php if($userManaged_type=='admin') echo('checked'); ?> >
-                <label class="form-check-label" for="exampleRadios3">
-                    Administrator
-                </label>
-            </div>
-        </div>
-    </div>
-
     <div class="form-group row">
         <button type="submit" class="btn btn-secondary" style="margin: auto">Save Changes</button>
     </div>
 </form>
 
 <div id="mngUsersLinkDiv">
-    <a href="Users.php">Manage Users</a>
-    <span> | </span>
-    <a href="DeleteUser.php?user=<?php echo($userManaged)?>">Delete User</a>
+    <a href="DeleteUser.php?user=<?php echo($userManaged)?>">Delete Your Profile</a>
 </div>
 
 </body>
+

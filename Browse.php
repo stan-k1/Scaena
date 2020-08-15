@@ -1,6 +1,6 @@
 <?php
 session_start();
-include_once('Elements/dbConnector.php');
+include_once('Controller/Elements/dbConnector.php');
 
 //Access Control
 if (isset($_SESSION['username'])) {
@@ -54,7 +54,7 @@ $rows = $videos_query->num_rows;
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
-    <?php include('Elements/Imports.html') ?>
+    <?php include('Controller/Elements/Imports.html') ?>
     <title>Browse | Scaena</title>
     <script>
         var currentNavItem = "#navLinkAnalyze";
@@ -73,7 +73,7 @@ $rows = $videos_query->num_rows;
 </head>
 <body>
 
-<?php include('Elements/header.php');?>
+<?php include('Controller/Elements/header.php');?>
 
 <div class="container restrictingContainer">
     <div class="dropdown">

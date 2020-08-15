@@ -9,8 +9,8 @@ $( window ).on( "load", function(){
 <div class="container" style="border-bottom: black">
 <nav class="navbar navbar-expand-lg navbar-light" id="navbar" style="font-family:Roboto !important; font-weight: bold;
 margin-bottom: 16px; margin-top: 16px">
-    <a class="navbar-brand" href="#">
-        <img src="Assets/scaena_logo_transparent.png" width="100" height="60" alt="Scaena" style="margin-bottom: 6px">
+    <a class="navbar-brand" href="Home.php">
+        <img src="Model/Assets/scaena_logo_transparent.png" width="100" height="60" alt="Scaena" style="margin-bottom: 6px">
     </a>
 
     <!-- Mobile Navigation Toggle -->
@@ -21,7 +21,7 @@ margin-bottom: 16px; margin-top: 16px">
     <div class="collapse navbar-collapse" id="main-navigation">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item" id="navLinkHome">
-                <a class="nav-link" href="#">Home</a>
+                <a class="nav-link" href="Home.php">Home</a>
             </li>
 
             <li class="nav-item">

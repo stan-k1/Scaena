@@ -20,11 +20,11 @@ session_destroy();
 ?>
 
 <head>
-    <?php include('Elements\Imports.html') ?>
+    <?php include('Controller/Elements/Imports.html') ?>
     <title>Sign Out | Scaena</title>
     <style>
         body{
-            background-image: url('Assets/scaena_background.png');
+            background-image: url('Model/Assets/scaena_background.png');
         }
         .wrapper{
             width: 350px; padding: 20px;
@@ -35,7 +35,7 @@ session_destroy();
 <body>
 <div class="row" style="position: relative">
     <div class="wrapper" id="errorBlock">
-        <img src="Assets/baseline_login_black_48dp.png" id="errorIcon">
+        <img src="Model/Assets/baseline_login_black_48dp.png" id="errorIcon">
         <br>
         <h4>You have signed out.</h4>
         <br>

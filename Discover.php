@@ -1,6 +1,6 @@
 <?php
 session_start();
-include_once('Elements/dbConnector.php');
+include_once('Controller/Elements/dbConnector.php');
 
 //Access Control
 if (isset($_SESSION['username'])) {
@@ -21,14 +21,14 @@ if (isset($_GET['video_input'])) {
 if (isset($_POST['order_by_input'])) {
     $order = $_POST['order_by_input'];
     if ($order == 'name') {
-        $videos_query_str = "SELECT filename, title, uploader, upload_date, poster, DATE_FORMAT(upload_date,'%d/%m/%Y') AS dateFormated from content ORDER BY title";
+        $videos_query_str = "SELECT filename, title, uploader, upload_date, poster, access_level, DATE_FORMAT(upload_date,'%d/%m/%Y') AS dateFormated from content ORDER BY title";
     } else if ($order == 'date') {
-        $videos_query_str = "SELECT filename, title, uploader, upload_date, poster, DATE_FORMAT(upload_date,'%d/%m/%Y') AS dateFormated from content ORDER BY upload_date DESC";
+        $videos_query_str = "SELECT filename, title, uploader, upload_date, poster, access_level, DATE_FORMAT(upload_date,'%d/%m/%Y') AS dateFormated from content ORDER BY upload_date DESC";
     } else if ($order == 'uploader') {
-        $videos_query_str = "SELECT filename, title, uploader, upload_date, poster, DATE_FORMAT(upload_date,'%d/%m/%Y') AS dateFormated from content ORDER BY uploader";
+        $videos_query_str = "SELECT filename, title, uploader, upload_date, poster, access_level, DATE_FORMAT(upload_date,'%d/%m/%Y') AS dateFormated from content ORDER BY uploader";
     }
 } else {
-    $videos_query_str = "SELECT filename, title, uploader, poster, upload_date, DATE_FORMAT(upload_date,'%d/%m/%Y'),  DATE_FORMAT(upload_date,'%d/%m/%Y') AS dateFormated from content ORDER BY title";
+    $videos_query_str = "SELECT filename, title, uploader, poster, upload_date, access_level, DATE_FORMAT(upload_date,'%d/%m/%Y'),  DATE_FORMAT(upload_date,'%d/%m/%Y') AS dateFormated from content ORDER BY title";
 }
 
 $videos_query = $conn->query($videos_query_str);
@@ -39,7 +39,7 @@ $rows = $videos_query->num_rows;
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
-    <?php include('Elements/Imports.html') ?>
+    <?php include('Controller/Elements/Imports.html') ?>
     <title>Discover | Scaena</title>
     <script>
         var currentNavItem = "#navLinkWatch";
@@ -58,7 +58,7 @@ $rows = $videos_query->num_rows;
 </head>
 <body>
 
-<?php include('Elements/header.php'); ?>
+<?php include('Controller/Elements/header.php'); ?>
 
 <div class="container restrictingContainer">
     <div class="dropdown">
@@ -86,9 +86,14 @@ $rows = $videos_query->num_rows;
         $uploader = $row['uploader'];
         $upload_date = $row['dateFormated'];
         $poster = $row['poster'];
+        $access_level = $row['access_level'];
+        //Skip a video that is private if it is not uploaded by current user and current user is not an admin
+        if ($access_level=='private'){
+            if ($user_type!='admin' && $username!=$uploader) continue;
+        }
 
         echo "<tr>";
-        echo "<td><img src='Assets/Content/" . $poster . "'alt='Scaena Video' class='previewImg' width='150' height='100'><a href='Watch.php?view=" . $row['filename'] . "'>" . $row['title'] . "</td>";
+        echo "<td><img src='Model/Content/" . $poster . "'alt='Scaena Video' class='previewImg' width='150' height='100'><a href='Watch.php?view=" . $row['filename'] . "'>" . $row['title'] . "</td>";
         //Print uploader first and last name
         $uploader_query_str = "SELECT first_name, last_name from users WHERE username='$uploader'";
         $uploader_query = $conn->query($uploader_query_str);
@@ -104,12 +109,12 @@ $rows = $videos_query->num_rows;
     $conn->close();
     ?>
 
-    <form action="Discover.php" id="videoSelectionForm">
-        <input type="hidden" id="video_input" name="video_input" value="filename"><br>
+    <form action="Discover.php" id="orderSelectionForm" method="post">
+        <input type="hidden" id="order_by_input" name="order_by_input" value="order"><br>
     </form>
 
-    <form action="Discover.php" id="orderSelectionForm" method="post">
-        <input type="hidden" id="order_by_input" name="order_by_input" value=""><br>
+    <form action="Discover.php" id="videoSelectionForm" method="get">
+        <input type="hidden" id="video_input" name="video_input" value="filename"><br>
     </form>
     <script>
         //Clears State To Prevent Form Resend Warnings On Reload or Back Press

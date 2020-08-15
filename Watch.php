@@ -1,6 +1,6 @@
 <?php
 session_start();
-include_once('Elements\dbConnector.php');
+include_once('Controller/Elements/dbConnector.php');
 
 //Retrieves the video based on the url (GET), defaults to the sea test video
 //E.g. Analyze.php?view=sea_video.mp4 loads the Analyze.php page with sea_video.mp4
@@ -54,11 +54,11 @@ $conn->close()
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
-    <?php include('Elements/TagmgrTag.html') ?>
+    <?php include('Controller/Elements/TagmgrTag.html') ?>
     <!--Meta-->
     <meta charset="UTF-8">
     <title>Scaena</title>
-    <?php include('Elements\Imports.html') ?>
+    <?php include('Controller/Elements/Imports.html') ?>
 
     <!--Functional Scripts-->
     <script>
@@ -78,15 +78,14 @@ $conn->close()
     }(document, 'script', 'facebook-jssdk'));</script>
 
 <!--Main Body-->
-<?php include('Elements\Header.php'); ?>
+<?php include('Controller/Elements/Header.php'); ?>
 
 
 <div class="row" id="videoWatchColumn">
     <div class="col-xl-12 text-center">
         <video class="video-js vjs-theme-sea" controls="true" id="video_player_large"
-               poster="Assets/Content/<?php echo $poster ?>">
-            <source src="Assets/Content/<?php echo $c_filename ?>" type="video/mp4">
-            <!--                <source src="//vjs.zencdn.net/v/oceans.webm" type="video/webm">-->
+               poster="Model/Content/<?php echo $poster ?>">
+            <source src="Model/Content/<?php echo $c_filename ?>" type="video/mp4">
         </video>
         <script src="https://vjs.zencdn.net/7.8.3/video.js"></script>
         <script src="videojs.ga.min.js"></script>

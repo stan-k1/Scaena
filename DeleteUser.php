@@ -1,6 +1,6 @@
 <?php
 session_start();
-include_once('Elements/dbConnector.php');
+include_once('Controller/Elements/dbConnector.php');
 
 //Access Control
 if (isset($_SESSION['username'])) {
@@ -44,11 +44,11 @@ if(isset($_POST['deleteInput'])) {
 ?>
 
 <head>
-    <?php include('Elements\Imports.html') ?>
+    <?php include('Controller/Elements/Imports.html') ?>
     <title>Error</title>
     <style>
         body{
-            background-image: url('Assets/scaena_background.png');
+            background-image: url('Model/Assets/scaena_background.png');
         }
         .wrapper{
             width: 350px; padding: 20px;
@@ -59,7 +59,7 @@ if(isset($_POST['deleteInput'])) {
 <body>
 <div class="row" style="position: relative">
     <div class="wrapper" id="errorBlock">
-        <img src="Assets/baseline_error_black_48dp.png" id="errorIcon">
+        <img src="Model/Assets/baseline_error_black_48dp.png" id="errorIcon">
         <br>
         <h4>This action will permananty delete user <?php echo($userManaged) ?> !</h4>
         <br>

@@ -1,6 +1,6 @@
 <?php
 session_start();
-include_once('Elements\dbConnector.php');
+include_once('Controller/Elements/dbConnector.php');
 
 //Access Control
 if (isset($_SESSION['username'])) {
@@ -21,7 +21,7 @@ if (isset($_SESSION['username'])) {
 //Upload Script For Video
 $uploadOk = 1;
 if(isset($_POST["submit"])) {
-    $target_dir = "Assets/Content/";
+    $target_dir = "Model/Content/";
     $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
     $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
@@ -49,7 +49,7 @@ if(isset($_POST["submit"])) {
         if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
             //If Video Uplad is OK, start trying to upload the poster.
             $filename = $_FILES['fileToUpload']['name'];
-            $target_dir = "Assets/Content/";
+            $target_dir = "Model/Content/";
             $target_file = $target_dir . basename($_FILES["posterToUpload"]["name"]);
             $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
@@ -78,7 +78,7 @@ if(isset($_POST["submit"])) {
                 echo("<p id='confimration_banner'>✔ The file " . basename($_FILES["fileToUpload"]["name"]) . " has been uploaded.<p>");
             }
             else{
-                unlink("Assets/Content/$filename");
+                unlink("Model/Content/$filename");
                 echo ("<p id='rejection_banner'>✘ An error occurred while uploading your file. Please try again.</p>");
             }
         } else {
@@ -92,11 +92,11 @@ $conn->close();
 
 <html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
-    <?php include('Elements/TagmgrTag.html') ?>
+    <?php include('Controller/Elements/TagmgrTag.html') ?>
     <!--Meta-->
     <meta charset="UTF-8">
     <title>Scaena</title>
-    <?php include('Elements\Imports.html') ?>
+    <?php include('Controller/Elements/Imports.html') ?>
 
     <!--Functional Scripts-->
     <script>
@@ -105,7 +105,7 @@ $conn->close();
 </head>
 
 <body>
-<?php include('Elements\Header.php'); ?>
+<?php include('Controller/Elements/Header.php'); ?>
 
 <div class="container mt-12 restrictingContainer">
     <h2>Upload Video</h2>

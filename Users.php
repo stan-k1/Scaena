@@ -1,6 +1,6 @@
 <?php
 session_start();
-include_once('Elements/dbConnector.php');
+include_once('Controller/Elements/dbConnector.php');
 
 //Access Control
 if (isset($_SESSION['username'])) {
@@ -32,7 +32,7 @@ $rows = $users_query->num_rows;
 <html lang="en">
 <head>
     <title>Manage Users | Scaena</title>
-    <?php include('Elements\Imports.html') ?>
+    <?php include('Controller/Elements/Imports.html') ?>
     <script>
         var currentNavItem = "#navLinkOptions";
         function selectUser(username) {
@@ -45,7 +45,7 @@ $rows = $users_query->num_rows;
 
 <body>
 <?php
-include_once('Elements/Header.html');
+include_once('Controller/Elements/Header.php');
 echo('<h1>Manage Users</h1>');
 
 echo "<table class='table' id='usersTable'><tr> <th>Username</th> <th>First Name</th><th>Last Name</th><th>Email</th><th>Type</th><th> </th> </tr>";

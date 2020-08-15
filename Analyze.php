@@ -1,6 +1,6 @@
 <?php
 session_start();
-include_once('Elements\dbConnector.php');
+include_once('Controller\Elements\dbConnector.php');
 
 //Retrieves the video based on the url (GET), defaults to the sea test video
 //E.g. Analyze.php?view=sea_video.mp4 loads the Analyze.php page with sea_video.mp4
@@ -23,28 +23,28 @@ $short_desc=$querry_output["short_desc"];
 $poster=$querry_output["poster"];
 $access=$querry_output["access_level"];
 $uploader=$querry_output['uploader'];
+$title = $querry_output['title'];
 
 //Access Control for Analytics Pages
 if ($user_type != 'admin' && $username != $uploader) {
     $_SESSION['cust_error_msg'] = "You are not authorized to see this page. If you believe this is an error, please contact your administrator.";
     header('Location: Error.php');
 }
-
 $conn->close()
 ?>
 
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
-    <?php include('Elements/TagmgrTag.html') ?>
+    <?php include('Controller\Elements/TagmgrTag.html') ?>
     <!--Meta-->
     <meta charset="UTF-8">
-    <title>Scaena</title>
-    <?php include('Elements\Imports.html') ?>
+    <title>Scaena | Analyze</title>
+    <?php include('Controller\Elements\Imports.html') ?>
 
     <!--Functional Scripts-->
     <script>
-        var currentNavItem = "#navLinkHome";
+        var currentNavItem = "#navLinkAnalyze";
         var setDatesToggled = false;
     </script>
     <script>
@@ -62,7 +62,7 @@ $conn->close()
             }
         }, 6000)
     </script>
-    <?php include('Elements/ReportingApi.html') ?>
+    <?php include('Controller\Elements\ReportingApi.html') ?>
 </head>
 
 <body>
@@ -70,10 +70,10 @@ $conn->close()
     <!-- Load the JavaScript API client and Sign-in library. -->
     <script src="https://apis.google.com/js/client:platform.js"></script>
     <!--Query Script Imports-->
-    <?php include('Queries\Query_Startup.php') ?>
-    <?php include('Queries\Query_Analytics.php') ?>
+    <?php include('Controller\Queries\Query_Startup.php') ?>
+    <?php include('Controller\Queries\Query_Analytics.php') ?>
     <!--Main Body-->
-    <?php include('Elements\Header.php'); ?>
+    <?php include('Controller\Elements\Header.php'); ?>
 
     <div class="container">
         <div class="row">
@@ -81,8 +81,8 @@ $conn->close()
                 <h1 id="contentHeading">Content Preview</h1>
                 <h6>Watch or review your media</h6>
                 <video class="video-js vjs-theme-sea" controls="true" id="video_player"
-                       poster="Assets/Content/<?php echo $poster ?>">
-                    <source src="Assets/Content/<?php echo $c_filename ?>" type="video/mp4">
+                       poster="Model/Content/<?php echo $poster ?>">
+                    <source src="Model/Content/<?php echo $c_filename ?>" type="video/mp4">
                     <!--                <source src="//vjs.zencdn.net/v/oceans.webm" type="video/webm">-->
                 </video>
                 <script src="https://vjs.zencdn.net/7.8.3/video.js"></script>
@@ -93,7 +93,7 @@ $conn->close()
                     })
                     var vidPlayer = document.getElementById("video_player");
                 </script>
-                <h2>Video Title</h2>
+                <h2><?php echo $title ?></h2>
                 <h6><?php echo $short_desc ?></h6>
                 <a href="Watch.php?view=<?php echo $c_filename ?>">Visit Video Page</a>
             </div>

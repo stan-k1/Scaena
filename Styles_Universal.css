@@ -296,6 +296,15 @@ th{
     margin-bottom: 18px;
 }
 
+.homeMenuItem{
+    margin: auto;
+    width: 100%;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    margin-bottom: 18px;
+}
+
 .font-icon-upped{
     position: relative;
     top: -3px;
@@ -385,4 +394,17 @@ th{
     font-family: "Open Sans", Helvetica, Arial, sans-serif;
     font-weight: 600;
     font-size: 15px;
+}
+
+#welcomeJumbotron {
+     background-image: url("Model/Assets/scaena_banner_min.png");
+     background-size: cover;
+    margin-top: 0;
+    color: white;
+ }
+
+#jumbotronLink{
+    color: inherit;
+    font-style: inherit;
+    font-weight: inherit;
 }
