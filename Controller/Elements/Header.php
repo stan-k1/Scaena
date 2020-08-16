@@ -28,6 +28,7 @@ margin-bottom: 16px; margin-top: 16px">
                 <a class="nav-link" href="Discover.php" id="navLinkWatch">Watch</a>
             </li>
             <?php
+            if (isset($user_type)){
             if ($user_type == 'admin' || $user_type == 'mod') {
                 echo<<<EOD
              <li class="nav-item">
@@ -35,6 +36,7 @@ margin-bottom: 16px; margin-top: 16px">
             </li>
 EOD
                 ;
+                }
 
             }
 

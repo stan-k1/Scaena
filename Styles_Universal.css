@@ -333,6 +333,11 @@ th{
     width: 96%;
 }
 
+.restrictingContainerSmall
+{
+    width: 60%;
+}
+
 #watchVideoTitle{
     margin-bottom: 0;
     padding-bottom: 2px;
@@ -407,4 +412,36 @@ th{
     color: inherit;
     font-style: inherit;
     font-weight: inherit;
+}
+
+#commentForm{
+    margin-top: 32px;
+}
+
+.commentHeader{
+    text-align: left;
+}
+
+hr {
+    border: 0;
+    clear:both;
+    display:block;
+    width: 96%;
+    background-color: gainsboro;
+    height: 2px;
+}
+
+.commentText{
+    text-align: left;
+    margin-top: 18px;
+}
+
+.deleteComment {
+    float: right;
+    color: #cd1c1c; !important;
+}
+
+#postCommentBtn{
+    padding-left: 24px;
+    padding-right: 24px;
 }
