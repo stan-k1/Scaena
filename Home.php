@@ -38,8 +38,9 @@ else if($user_type== "mod"){
 }
 
 ?>
+
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html lang="en">
 <head>
     <?php include('Controller/Elements/TagmgrTag.html') ?>
     <!--Meta-->
@@ -66,7 +67,7 @@ else if($user_type== "mod"){
     <div class="container">
         <h1 class="display-4">Welcome, <?php echo $first_name ?></h1>
         <?php
-        if($isMod) echo ('<p class="lead"><a href="Analyze.php" id="jumbotronLink">Analyze your videos ►</a> </p>');
+        if($isMod) echo ('<p class="lead"><a href="Browse.php" id="jumbotronLink">Analyze your videos ►</a> </p>');
         else echo('<p class="lead"><a href="Discover.php" id="jumbotronLink">Discover all videos ►</a> </p>')
         ?>
     </div>

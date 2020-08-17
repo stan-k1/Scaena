@@ -89,7 +89,7 @@ $rows = $videos_query->num_rows;
         $access_level = $row['access_level'];
         //Skip a video that is private if it is not uploaded by current user and current user is not an admin
         if ($access_level=='private'){
-            if ($user_type!='admin' && $username!=$uploader) continue;
+            if (!$isAdmin && $username!=$uploader) continue;
         }
 
         echo "<tr>";
@@ -104,8 +104,8 @@ $rows = $videos_query->num_rows;
         echo "<td><button type='button' class='btn btn-outline-secondary' style='display:block; margin: auto' onclick='selectVideo($filename)'>Watch</button></td>";
         echo "</tr>";
     }
-
     echo("</table>");
+
     $conn->close();
     ?>
 

@@ -43,6 +43,8 @@ if(isset($_POST['deleteInput'])) {
 
 ?>
 
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <?php include('Controller/Elements/Imports.html') ?>
     <title>Error</title>

@@ -61,10 +61,19 @@ if (isset($_POST['delete_comment_input'])){
     $post_querry = $conn->query("DELETE FROM comments WHERE id=$delete_comment_id");
 }
 
+//After all form processing is done, clear the local window state to prevent resubmission on refresh/bookmarking etc
+echo <<<EOD
+<script>
+    if ( window.history.replaceState ) {
+        window.history.replaceState( null, null, window.location.href );
+    }
+</script>
+EOD;
+
 ?>
 
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html lang="en">
 <head>
     <?php include('Controller/Elements/TagmgrTag.html') ?>
     <!--Meta-->
@@ -155,14 +164,13 @@ if (isset($_POST['delete_comment_input'])){
         <div class="container restrictingContainerSmall">
             <h2>Comments</h2>
             <?php
-            $comments_querry = $conn->query("SELECT id, username, comment_text, votes, date FROM comments where filename='" . $view . "'");
+            $comments_querry = $conn->query("SELECT id, username, comment_text, date FROM comments where filename='" . $view . "'");
             $rows = $comments_querry->num_rows;
             for ($j = 0; $j < $rows; ++$j) {
                 $row = $comments_querry->fetch_array(MYSQLI_ASSOC);
                 $poster = $row['username'];
                 $comment = $row['comment_text'];
                 $date = $row['date'];
-                $votes = $row['votes'];
                 $id = $row['id'];
 
                 if($poster!= null) {
@@ -174,13 +182,14 @@ if (isset($_POST['delete_comment_input'])){
                 }
                 else $poster_name="Unknown User";
 
-                echo "<h4 class='commentHeader'>$poster_name</h4><span><i>posted on $date</i></span>";
+                echo "<h4 class='commentHeader'>$poster_name</h4><span style='font-weight: 300'><i>posted on $date</i></span>";
                 echo "<br>";
                 echo "<p class='commentText' style='display:inline-block;'>$comment</p>";
                 echo "<span style='display: none' id='comment_id'>$id</span>";
 
+
                 if ($isMod) {
-                        echo "<a href='#' style='display: inline-block; color: #cd1c1c' onclick='deleteComment($id)' class='deleteComment'> Delete</a>";
+                        echo "<a href='#' style='display: inline-block; color: #cd1c1c' onclick='deleteComment($id)' class='deleteComment'> Delete </a><br>";
                 }
 
                 if ($j<$rows-1) echo "<hr>";
@@ -226,3 +235,4 @@ EOD;
 ?>
 
 </body>
+</html>

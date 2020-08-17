@@ -46,7 +46,7 @@ EOD
                 <a class="nav-link" href="Options.php" id="navLinkOptions">Options</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="Contact.php" id="navLinkContact">About</a>
+                <a class="nav-link" href="About.php" id="navLinkAbout">About</a>
             </li>
         </ul>
     </div>

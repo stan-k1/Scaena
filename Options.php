@@ -20,7 +20,7 @@ $conn->close();
 ?>
 
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html lang="en">
 <head>
     <?php include_once('Controller/Elements/Imports.html'); ?>
     <title>Options | Scaena</title>
@@ -52,6 +52,7 @@ if ($isAdmin) {
 </div>
 
 </body>
+</html>
 
 
 

@@ -30,11 +30,22 @@ if ($user_type != 'admin' && $username != $uploader) {
     $_SESSION['cust_error_msg'] = "You are not authorized to see this page. If you believe this is an error, please contact your administrator.";
     header('Location: Error.php');
 }
+
+//Delete the video if the form has been submitted
+if (isset($_POST['delete_video'])){
+    if ($_POST['delete_video']=='delete'){
+        $delete_query=$conn->query("DELETE FROM content WHERE filename='$view'");
+        unlink("Model/Content/$c_filename");
+        unlink("Model/Content/$poster");
+        header('Location: Browse.php');
+    }
+}
+
 $conn->close()
 ?>
 
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html lang="en">
 <head>
     <?php include('Controller\Elements/TagmgrTag.html') ?>
     <!--Meta-->
@@ -46,6 +57,10 @@ $conn->close()
     <script>
         var currentNavItem = "#navLinkAnalyze";
         var setDatesToggled = false;
+        function deleteVideo(){
+            document.getElementById('delete_video').value='delete';
+            document.getElementById('deleteVideoForm').submit();
+        }
     </script>
     <script>
         $(document).ready(function () {
@@ -96,6 +111,8 @@ $conn->close()
                 <h2><?php echo $title ?></h2>
                 <h6><?php echo $short_desc ?></h6>
                 <a href="Watch.php?view=<?php echo $c_filename ?>">Visit Video Page</a>
+                <br>
+                <a href="#" id="deleteVideoLink" data-toggle="modal" data-target="#deleteModal">Delete This Video</a>
             </div>
             <div class="col-xl-6 text-center border border-secondary bg bg-light">
                 <h1>Quick Glance</h1>
@@ -127,6 +144,8 @@ $conn->close()
             </div>
         </div>
     </div>
+
+<!--  Analytics Panel and Section-->
 
     <?php $queries = array();?>
 
@@ -704,9 +723,36 @@ $conn->close()
 
     <!-- The API response will be printed here. -->
     <textarea cols="80" rows="20" id="query-output"></textarea>
-    <!--End of Main Body-->
-
 </div>
+
+<!--Delete Video Modal-->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Permanently Delete Video</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                This action will permanently delete this video and cannot be reversed. Are you sure you want to proceed?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" onclick="deleteVideo()">Delete</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--End of Main Body-->
+
+<form id="deleteVideoForm" name="deleteVideoForm" method="post">
+    <input type="hidden" id="delete_video" name="delete_video" value="">
+</form>
+
+
 </body>
 </html>
 

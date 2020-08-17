@@ -5,6 +5,8 @@ if(!empty($_SESSION['cust_error_msg'])){
 };
 ?>
 
+<!DOCTYPE HTML>
+<HTML lang="en">
 <head>
     <?php include('Controller/Elements/Imports.html') ?>
     <title>Error</title>
@@ -34,3 +36,4 @@ if(!empty($_SESSION['cust_error_msg'])){
     </div>
 </div>
 </body>
+</HTML>

@@ -19,6 +19,8 @@ if (ini_get("session.use_cookies")) {
 session_destroy();
 ?>
 
+<!DOCTYPE HTML>
+<html lang="en">
 <head>
     <?php include('Controller/Elements/Imports.html') ?>
     <title>Sign Out | Scaena</title>
@@ -43,3 +45,4 @@ session_destroy();
     </div>
 </div>
 </body>
+</html>
