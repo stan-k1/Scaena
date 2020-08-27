@@ -211,10 +211,17 @@
             <!--Hides the <p> if data is retrieved after the message has been displayed-->
             $('#no_login_message').hide();
 
+            if(vidCompletions==0){
+                VidCompletionsPercentage=0;
+                VidCompletionsPercentageReminder=0;
+            }
+            else
+            {
             VidCompletionsPercentage = vidCompletions * (100 / plays).toFixed(2);
             VidCompletionsPercentage = Math.round(VidCompletionsPercentage * 100) / 100;
             var VidCompletionsPercentageReminder = 100 - VidCompletionsPercentage;
             VidCompletionsPercentageReminder = Math.round(VidCompletionsPercentageReminder * 100) / 100;
+            }
             document.getElementById('q1completions').innerHTML = vidCompletions +" ("+VidCompletionsPercentage+ "%)";
             myChart.data.datasets[0].data = [VidCompletionsPercentage, VidCompletionsPercentageReminder];
             myChart.update();
@@ -286,19 +293,22 @@
             deviceChart.data.datasets[0].data = [desktops, tablets, phones];
             deviceChart.update();
 
-            //Also display percentages next to numberical results
+            //Also display percentages next to numerical results
             var allVisits=parseInt(desktops+phones+tablets);
 
             var visitPercentage = desktops * (100 / allVisits).toFixed(2);
             visitPercentage = Math.round(visitPercentage * 100);
+            if (isNaN(visitPercentage)) visitPercentage=0;
             document.getElementById('q2desktops').append(" ("+visitPercentage+"%)")
 
-            var visitPercentage = tablets * (100 / allVisits).toFixed(2);
+            visitPercentage = tablets * (100 / allVisits).toFixed(2);
             visitPercentage = Math.round(visitPercentage * 100);
+            if (isNaN(visitPercentage)) visitPercentage=0;
             document.getElementById('q2tablets').append(" ("+visitPercentage+"%)")
 
-            var visitPercentage = phones * (100 / allVisits).toFixed(2);
+            visitPercentage = phones * (100 / allVisits).toFixed(2);
             visitPercentage = Math.round(visitPercentage * 100);
+            if (isNaN(visitPercentage)) visitPercentage=0;
             document.getElementById('q2phones').append(" ("+visitPercentage+"%)")
 
 
@@ -415,6 +425,7 @@
 
             progress25 = original.reports[0].data.totals[0].values[0];
             var percentage = progress25 * (100 / plays).toFixed(2);
+            if (isNaN(percentage)) percentage=0;
             document.getElementById('q5progress25').innerHTML = progress25+" ("+percentage+"%)";
             queryReports7();
         }
@@ -461,6 +472,7 @@
 
             progress50 = original.reports[0].data.totals[0].values[0];
             percentage = progress50 * (100 / plays).toFixed(2);
+            if (isNaN(percentage)) percentage=0;
             document.getElementById('q5progress50').innerHTML = progress50+" ("+percentage+"%)";
             queryReports8();
         }
@@ -507,6 +519,7 @@
 
             var progress75 = original.reports[0].data.totals[0].values[0];
             var percentage = progress75 * (100 / plays).toFixed(2);
+            if (isNaN(percentage)) percentage=0;
             document.getElementById('q5progress75').innerHTML = progress75 +" ("+percentage+"%)";
             document.getElementById('q5plays').innerHTML = plays;
             document.getElementById('q5completions').innerHTML = vidCompletions +" (" + VidCompletionsPercentage+"%)";

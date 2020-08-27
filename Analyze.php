@@ -173,7 +173,10 @@ $conn->close()
                            onclick="Query_Analytics('2010-01-01','today', false)">All Time
                 </label>
                 <label class="btn btn-secondary">
-                    <input type="radio" name="data_range" id="cusd" data-toggle="modal" data-target="#exampleModal"">Custom
+                    <input type="radio" name="data_range" id="cusd" data-toggle="modal" data-target="#academicyearModal"">Academic Year
+                </label>
+                <label class="btn btn-secondary">
+                    <input type="radio" name="acyear_range" id="acyeard" data-toggle="modal" data-target="#exampleModal"">Custom
                 </label>
             </div>
         </div>
@@ -275,6 +278,58 @@ $conn->close()
             function cancelCustom() {
                 $("#setdates").hide();
                 $("#daysStart").prop("disabled", false);
+            }
+        </script>
+
+        <!-- Academic Year Modal -->
+        <div class="modal fade" id="academicyearModal" tabindex="-1" role="dialog" aria-labelledby="academicyearModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="academicyearModalLabel">Academic Year Range</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+<!--                        <label for="acyearSelect">Select an academic year to retrieve data-->
+<!--                            from:</label><br>-->
+<!--                        <input type="text" class="form-control" id="acyearSelect" name="acyearSelect"><br>-->
+                        <div class="dropdown">
+                            <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Select a year...
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <?php
+                                $year=(int)date('Y');
+                                $stop_year=$year-10;
+                                //Display the last 10 years
+                                while ($year>=$stop_year) {
+                                    echo "<a class='dropdown-item' onclick='academicYear($year)'>$year</a>";
+                                    $year--;
+                                }
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-danger float-right" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function academicYear(year){
+                var acYear = year;
+                acYearStart = acYear-1;
+                acYearStart = acYearStart+('-09-01');
+                acYearEnd=acYear+('-07-31')
+                console.log('Retrieving Data For Academic Year'+acYear);
+                console.log('Academic Year Start: '+acYearStart);
+                console.log('Academic Year End: '+acYearEnd);
+                Query_Analytics(acYearStart, acYearEnd, false);
+                $('#academicyearModal').modal('hide');
             }
         </script>
 
