@@ -18,7 +18,7 @@ if (isset($_GET['video_input'])){
     header('Location: Analyze.php?view='.$_GET['video_input']);
 }
 
-if($user_type="admin") { //Admininstrators can edit and see analytics for all videos
+if($user_type=="admin") { //Admininstrators can edit and see analytics for all videos
     if (isset($_POST['order_by_input'])) {
         $order = $_POST['order_by_input'];
         if ($order == 'name') {
@@ -32,23 +32,24 @@ if($user_type="admin") { //Admininstrators can edit and see analytics for all vi
         $videos_query_str = "SELECT filename, title, uploader, upload_date, DATE_FORMAT(upload_date,'%d/%m/%Y'),  DATE_FORMAT(upload_date,'%d/%m/%Y') AS dateFormated from content ORDER BY title";
     }
 }
-else if($user_type="mod") { //Moderators can edit and see analytics for videos they have uploaded
+else if($user_type=="mod") { //Moderators can edit and see analytics for videos they have uploaded
     if (isset($_POST['order_by_input'])) {
         $order = $_POST['order_by_input'];
         if ($order == 'name') {
-            $videos_query_str = "SELECT filename, title, uploader, upload_date, DATE_FORMAT(upload_date,'%d/%m/%Y') AS dateFormated from content ORDER BY title WHERE uploader='$username'";
+            $videos_query_str = "SELECT filename, title, uploader, upload_date, DATE_FORMAT(upload_date,'%d/%m/%Y') AS dateFormated from content WHERE uploader='$username' ORDER BY title ";
         } else if ($order == 'date') {
-            $videos_query_str = "SELECT filename, title, uploader, upload_date, DATE_FORMAT(upload_date,'%d/%m/%Y') AS dateFormated from content ORDER BY upload_date DESC WHERE uploader='$username'";
+            $videos_query_str = "SELECT filename, title, uploader, upload_date, DATE_FORMAT(upload_date,'%d/%m/%Y') AS dateFormated from content WHERE uploader='$username' ORDER BY upload_date DESC";
         } else if ($order == 'uploader') {
-            $videos_query_str = "SELECT filename, title, uploader, upload_date, DATE_FORMAT(upload_date,'%d/%m/%Y') AS dateFormated from content ORDER BY uploader WHERE uploader='$username'";
+            $videos_query_str = "SELECT filename, title, uploader, upload_date, DATE_FORMAT(upload_date,'%d/%m/%Y') AS dateFormated from content WHERE uploader='$username' ORDER BY uploader ";
         }
     } else {
-        $videos_query_str = "SELECT filename, title, uploader, upload_date, DATE_FORMAT(upload_date,'%d/%m/%Y'),  DATE_FORMAT(upload_date,'%d/%m/%Y') AS dateFormated from content ORDER BY title WHERE uploader='$username'";
+        $videos_query_str = "SELECT filename, title, uploader, upload_date, DATE_FORMAT(upload_date,'%d/%m/%Y') AS dateFormated from content WHERE uploader='$username' ORDER BY title";
     }
 }
-
 $videos_query=$conn->query($videos_query_str);
+if (!$videos_query) echo 'not';
 $rows = $videos_query->num_rows;
+
 ?>
 
 <!DOCTYPE HTML>
@@ -101,6 +102,7 @@ $rows = $videos_query->num_rows;
         $uploader=$row['uploader'];
         $upload_date=$row['dateFormated'];
 
+
         echo "<tr>";
         echo "<td><a href='Watch.php?view=".$row['filename']. "'>".$row['title'] . "</td>";
         //Print uploader first and last name
@@ -117,6 +119,10 @@ $rows = $videos_query->num_rows;
     echo ("</table>");
     $conn->close();
     ?>
+
+    <div id="LinkDiv">
+        <a href="Upload.php"><i class="material-icons">add_circle_outline</i> Upload New Content</a>
+    </div>
 
     <form action="Browse.php" id="videoSelectionForm">
         <input type="hidden" id="video_input" name="video_input" value="filename"><br>

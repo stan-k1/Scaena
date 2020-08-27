@@ -18,7 +18,7 @@ if (isset($_SESSION['username'])) {
 $userManaged = $username;
 //Updates the username var in session if the user has changed his own username so that access to the site can continue without loggin in again
 if (isset($_POST['mng_username'])) {
-    if($userManaged==$_SESSION['username']) $_SESSION['username']= $_POST['mng_username'];
+     $_SESSION['username']= $_POST['mng_username'];
 }
 
 //If form has been sumbitted update the db
@@ -28,23 +28,27 @@ if (isset($_POST['mng_username'])) {
     $updated_first_name = $_POST["mng_first_name"];
     $updated_last_name = $_POST["mng_last_name"];
     $updated_email = $_POST["mng_email"];
-    $user_edit_query_str = "UPDATE Users SET username='$updated_username', password='$updated_password', first_name='$updated_last_name', 
-     last_name='$updated_last_name', email='$updated_email' WHERE username='$userManaged'";
-    $check_querry = $conn->query($user_edit_query_str);
+    $user_edit_query_str = "UPDATE Users SET username=?, password= ?, first_name= ?, 
+     last_name=?, email=? WHERE username=?";
+    $user_edit_query = $conn->prepare($user_edit_query_str);
+    $user_edit_query->bind_param('ssssss',$updated_username, $updated_password, $updated_first_name, $updated_last_name,
+        $updated_email, $userManaged);
+    $user_edit_query->execute();
     $_POST['mng_username']=null;
     $_GET['user']=$updated_username;
     $userManaged = $updated_username;
-    echo('<p id="confimration_banner">✔ Chanages to user '. $updated_username.' '.$updated_last_name.' ('.$userManaged.')'.' saved! <p>');
+    if ($user_edit_query->error) echo '<p>✘ Could not update your profile. Please try again.</p>';
+    else echo('<p id="confimration_banner">✔ Your profile has been updated. <p>');
 }
 
 //Retrieve Managed User Details
 $manage_query_str = "SELECT username, password, email, first_name, last_name from users WHERE username='$userManaged'";
 $manage_query = $conn->query($manage_query_str);
 $manage_query = $manage_query->fetch_assoc();
-if (!$manage_query) {
-    $_SESSION['cust_error_msg'] = "Invalid argument. Please access this page through the proper interfaces.";
-    header('Location: Error.php');
-}
+//if (!$manage_query) {
+//    $_SESSION['cust_error_msg'] = "Invalid argument. Please access this page through the proper interfaces.";
+//    header('Location: Error.php');
+//}
 
 $userManaged_password = $manage_query['password'];
 $userManaged_first_name = $manage_query['first_name'];
@@ -109,7 +113,7 @@ $conn->close();
     </div>
 </form>
 
-<div id="mngUsersLinkDiv">
+<div id="LinkDiv">
     <a href="DeleteUser.php?user=<?php echo($userManaged)?>">Delete Your Profile</a>
 </div>
 

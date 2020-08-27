@@ -11,6 +11,7 @@
         var views;
         var progress25;
         var progress50;
+        var VidCompletionsPercentage;
 
 
         //Metrics used in multiple display functons (function globals)
@@ -153,7 +154,6 @@
             if (initQueryBool) {
                 document.getElementById('completions').innerHTML = x;
             }
-            document.getElementById('q1completions').innerHTML = x;
             vidCompletions = x;
             queryReports3()
         }
@@ -211,10 +211,11 @@
             <!--Hides the <p> if data is retrieved after the message has been displayed-->
             $('#no_login_message').hide();
 
-            var VidCompletionsPercentage = vidCompletions * (100 / plays).toFixed(2);
+            VidCompletionsPercentage = vidCompletions * (100 / plays).toFixed(2);
             VidCompletionsPercentage = Math.round(VidCompletionsPercentage * 100) / 100;
             var VidCompletionsPercentageReminder = 100 - VidCompletionsPercentage;
             VidCompletionsPercentageReminder = Math.round(VidCompletionsPercentageReminder * 100) / 100;
+            document.getElementById('q1completions').innerHTML = vidCompletions +" ("+VidCompletionsPercentage+ "%)";
             myChart.data.datasets[0].data = [VidCompletionsPercentage, VidCompletionsPercentageReminder];
             myChart.update();
             //q1 Suggestions Logic
@@ -284,6 +285,22 @@
 
             deviceChart.data.datasets[0].data = [desktops, tablets, phones];
             deviceChart.update();
+
+            //Also display percentages next to numberical results
+            var allVisits=parseInt(desktops+phones+tablets);
+
+            var visitPercentage = desktops * (100 / allVisits).toFixed(2);
+            visitPercentage = Math.round(visitPercentage * 100);
+            document.getElementById('q2desktops').append(" ("+visitPercentage+"%)")
+
+            var visitPercentage = tablets * (100 / allVisits).toFixed(2);
+            visitPercentage = Math.round(visitPercentage * 100);
+            document.getElementById('q2tablets').append(" ("+visitPercentage+"%)")
+
+            var visitPercentage = phones * (100 / allVisits).toFixed(2);
+            visitPercentage = Math.round(visitPercentage * 100);
+            document.getElementById('q2phones').append(" ("+visitPercentage+"%)")
+
 
             //q2 Suggestions Logic
             if (desktops + tablets * 0.5 > phones + tablets * 0.5) {
@@ -397,7 +414,8 @@
             document.getElementById('query-output').value = formattedJson;
 
             progress25 = original.reports[0].data.totals[0].values[0];
-            document.getElementById('q5progress25').innerHTML = progress25;
+            var percentage = progress25 * (100 / plays).toFixed(2);
+            document.getElementById('q5progress25').innerHTML = progress25+" ("+percentage+"%)";
             queryReports7();
         }
 
@@ -442,7 +460,8 @@
             document.getElementById('query-output').value = formattedJson;
 
             progress50 = original.reports[0].data.totals[0].values[0];
-            document.getElementById('q5progress50').innerHTML = progress50;
+            percentage = progress50 * (100 / plays).toFixed(2);
+            document.getElementById('q5progress50').innerHTML = progress50+" ("+percentage+"%)";
             queryReports8();
         }
 
@@ -487,9 +506,10 @@
             document.getElementById('query-output').value = formattedJson;
 
             var progress75 = original.reports[0].data.totals[0].values[0];
-            document.getElementById('q5progress75').innerHTML = progress75;
+            var percentage = progress75 * (100 / plays).toFixed(2);
+            document.getElementById('q5progress75').innerHTML = progress75 +" ("+percentage+"%)";
             document.getElementById('q5plays').innerHTML = plays;
-            document.getElementById('q5completions').innerHTML = vidCompletions;
+            document.getElementById('q5completions').innerHTML = vidCompletions +" (" + VidCompletionsPercentage+"%)";
 
             progChart.data.datasets[0].data = [plays, progress25, progress50, progress75, vidCompletions];
             progChart.update();
@@ -507,11 +527,11 @@
 
             //q5- Additional SUggetsions
             if (progress50 == progress25) { //CHNAGE THIS BACK
-                $('#q5suggestions').append("<br> In addition, a large number of students skip the introduction of this video. Consider making shorter or more concise intros to retain student interest.");
+                $('#q5suggestions').append("In addition, a large number of students skip the introduction of this video. Consider making shorter or more concise intros to retain student interest.");
             } else if (progress50 > vidCompletions) {
-                $('#q5suggestions').append("<br> In addition, many students watch this video to the half point mark but do not complete it. Consider decreasing content length to maintain student interest.");
+                $('#q5suggestions').append("In addition, many students watch this video to the half point mark but do not complete it. Consider decreasing content length to maintain student interest.");
             } else if (progress25 > progress50 && progress75 > progress50) {
-                $('#q5suggestions').append("<br> In addition, many students that watch this video, skip the middle portion, consider making more condense or engaging content to retain student engagement throughout the duration of the video.");
+                $('#q5suggestions').append("In addition, many students that watch this video, skip the middle portion, consider making more condense or engaging content to retain student engagement throughout the duration of the video.");
             }
 
         }

@@ -142,7 +142,7 @@ $conn->close();
     </div>
 </form>
 
-<div id="mngUsersLinkDiv">
+<div id="LinkDiv">
     <a href="Users.php">Manage Users</a>
     <span> | </span>
     <a href="DeleteUser.php?user=<?php echo($userManaged)?>">Delete User</a>

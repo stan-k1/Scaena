@@ -110,9 +110,11 @@ $conn->close()
                 </script>
                 <h2><?php echo $title ?></h2>
                 <h6><?php echo $short_desc ?></h6>
-                <a href="Watch.php?view=<?php echo $c_filename ?>">Visit Video Page</a>
+                <a href="Watch.php?view=<?php echo $c_filename ?>">Visit Content Page</a>
+                <span> | </span>
+                <a href="EditContent.php?view=<?php echo $c_filename ?>">Edit Content Details</a>
                 <br>
-                <a href="#" id="deleteVideoLink" data-toggle="modal" data-target="#deleteModal">Delete This Video</a>
+                <a href="#" id="deleteVideoLink" data-toggle="modal" data-target="#deleteModal">Permanently Delete This Content</a>
             </div>
             <div class="col-xl-6 text-center border border-secondary bg bg-light">
                 <h1>Quick Glance</h1>

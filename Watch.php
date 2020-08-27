@@ -52,7 +52,11 @@ if (!is_null($access)) {
 //Post a comment if the form is set
 if (isset($_POST['comment_text'])){
     $comment_text=stringSanitizer($_POST['comment_text']);
-    $post_querry = $conn->query("INSERT INTO comments (comment_text, filename, username) values('$comment_text','$c_filename', '$username')");
+    if (isset($_POST['timestampCheck'])){
+        $comment_timestamp=$_POST['timestampInput'];
+        $post_querry = $conn->query("INSERT INTO comments (comment_text, filename, username, timestamp) values('$comment_text','$c_filename', '$username','$comment_timestamp')");
+    }
+    else $post_querry = $conn->query("INSERT INTO comments (comment_text, filename, username) values('$comment_text','$c_filename', '$username')");
 }
 
 //Delete a comment if the form is set
@@ -85,6 +89,7 @@ EOD;
     <script>
         var currentNavItem = "#navLinkWatch";
     </script>
+    <script src="Controller/Elements/PlayerOperations.js"></script>
 </head>
 
 <body>
@@ -101,7 +106,6 @@ EOD;
 <!--Main Body-->
 <?php include('Controller/Elements/Header.php'); ?>
 
-
 <div class="row" id="videoWatchColumn">
     <div class="col-xl-12 text-center">
         <video class="video-js vjs-theme-sea" controls="true" id="video_player_large"
@@ -115,6 +119,7 @@ EOD;
                 this.ga();
             })
             var vidPlayer = document.getElementById("video_player_large");
+            var player=videojs(document.getElementById('video_player_large'));
         </script>
     </div>
 </div>
@@ -164,7 +169,7 @@ EOD;
         <div class="container restrictingContainerSmall">
             <h2>Comments</h2>
             <?php
-            $comments_querry = $conn->query("SELECT id, username, comment_text, date FROM comments where filename='" . $view . "'");
+            $comments_querry = $conn->query("SELECT id, username, comment_text, date, timestamp FROM comments where filename='" . $view . "'");
             $rows = $comments_querry->num_rows;
             for ($j = 0; $j < $rows; ++$j) {
                 $row = $comments_querry->fetch_array(MYSQLI_ASSOC);
@@ -172,6 +177,7 @@ EOD;
                 $comment = $row['comment_text'];
                 $date = $row['date'];
                 $id = $row['id'];
+                $timestamp = $row['timestamp'];
 
                 if($poster!= null) {
                     //Get uploader first and last name
@@ -183,13 +189,18 @@ EOD;
                 else $poster_name="Unknown User";
 
                 echo "<h4 class='commentHeader'>$poster_name</h4><span style='font-weight: 300'><i>posted on $date</i></span>";
+                if($timestamp!=null){
+                    $timestamp_formatted=number_format($timestamp,1);
+                    echo "<br><span class='timestamp' onclick='player.currentTime($timestamp)'>at ".$timestamp_formatted. " Seconds</span>";
+                }
                 echo "<br>";
-                echo "<p class='commentText' style='display:inline-block;'>$comment</p>";
+
+                echo "<span class='commentText' style='display:inline-block;'>$comment</span>";
                 echo "<span style='display: none' id='comment_id'>$id</span>";
 
 
                 if ($isMod) {
-                        echo "<a href='#' style='display: inline-block; color: #cd1c1c' onclick='deleteComment($id)' class='deleteComment'> Delete </a><br>";
+                        echo "<a href='#' style='color: #cd1c1c;' onclick='deleteComment($id)' class='deleteComment'> Delete </a><br>";
                 }
 
                 if ($j<$rows-1) echo "<hr>";
@@ -200,15 +211,26 @@ EOD;
             //Form for posting comments is only shown if the user is signed in
             if(isset($username)) {
                 echo <<<EOD
-            <form id="commentForm" name="commentForm" method="post">
+            <form id="commentForm" name="commentForm" onsubmit="submitComment()" method="post">
                 <div class="form-group">
                     <label for="commentText"><i class="material-icons font-icon-upped">add_comment</i> Post a new comment...</label>
                     <textarea class="form-control" id="commentText" name="comment_text" rows="3" required></textarea>
+                   
+                  <div class="form-check">
+                      <input class="form-check-input" type="checkbox" value="" id="timestampCheck" name="timestampCheck">
+                      <label class="form-check-label" for="defaultCheck1">Include a stamp of current video time.</label>
+                </div>
+                <input type="hidden" id="timestampInput" name="timestampInput">
                 </div>
 
-
-                    <button type="submit" class="btn btn-primary" id="postCommentBtn">Post</button>
+                <button type="submit" class="btn btn-primary" id="postCommentBtn">Post</button>
             </form>
+            <script>
+                function submitComment(){
+                    document.getElementById('timestampInput').value=getCurrentTime(player);
+                }
+            </script>
+
 EOD;
             }
             else echo "<br><p><i><a href='Signin.php'>Sign in</a> to post a comment.</i></p><br>"
