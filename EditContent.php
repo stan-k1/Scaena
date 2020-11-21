@@ -1,6 +1,6 @@
 <?php
 session_start();
-include_once('Controller/Elements/dbConnector.php');
+include_once('Elements/dbConnector.php');
 
 if (@$_GET['view'] == null) {
     $_SESSION['cust_error_msg'] = "Invalid argument. Please access this page through the proper interfaces.";
@@ -36,6 +36,7 @@ if(isset($_POST['contTitle'])) {
     if (!$edit_query){
         echo '<p>✘ Could not update content details. Please try again.</p>';
     }
+    else echo "<p id='confimration_banner'>✔ Changes saved.</p>";
 }
 
 //Get video details from database
@@ -53,11 +54,11 @@ $cont_desc = $querry_output['cont_desc'];
 
 <html lang="en">
 <head>
-    <?php include('Controller/Elements/TagmgrTag.html') ?>
+    <?php include('Elements/TagmgrTag.html') ?>
     <!--Meta-->
     <meta charset="UTF-8">
     <title>Edit Content | Scaena</title>
-    <?php include('Controller/Elements/Imports.html') ?>
+    <?php include('Elements/Imports.html') ?>
 
     <!--Functional Scripts-->
     <script>
@@ -66,7 +67,7 @@ $cont_desc = $querry_output['cont_desc'];
 </head>
 
 <body>
-<?php include('Controller/Elements/Header.php'); ?>
+<?php include('Elements/Header.php'); ?>
 
 <div class="container mt-12 restrictingContainer">
     <h2>Edit Content Details</h2>
@@ -97,7 +98,7 @@ $cont_desc = $querry_output['cont_desc'];
         </div>
 
         <div class="mt-3">
-            <button type="submit" class="btn btn-primary" name="submit">Upload</button>
+            <button type="submit" class="btn btn-primary" name="submit">Save</button>
         </div>
 
     </form>

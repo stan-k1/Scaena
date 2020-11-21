@@ -1,6 +1,6 @@
 <?php
 session_start();
-include_once('Controller/Elements/dbConnector.php');
+include_once('Elements/dbConnector.php');
 
 //Access Control
 if (isset($_SESSION['username'])) {
@@ -32,12 +32,23 @@ if (!$delete_query) {
 
 //If form is submitted delete user
 if(isset($_POST['deleteInput'])) {
-    echo('woo');
     if ($_POST['deleteInput'] == 'delete') {
         $delete_query_str = "DELETE FROM users WHERE username='$userManaged'";
         $delete_query = $conn->query($delete_query_str);
         $_GET['deleteInput'] = null;
-        header('Location: Users.php');
+        if($userManaged==$_SESSION['username']) {
+            header('Location: Signin.php');
+            if (ini_get("session.use_cookies")) {
+                $params = session_get_cookie_params();
+                setcookie(session_name(), '', time() - 42000,
+                    $params["path"], $params["domain"],
+                    $params["secure"], $params["httponly"]
+                );
+            }
+            session_destroy();
+        }
+
+        else header('Location:Users.php');
     }
 }
 
@@ -46,11 +57,11 @@ if(isset($_POST['deleteInput'])) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <?php include('Controller/Elements/Imports.html') ?>
+    <?php include('Elements/Imports.html') ?>
     <title>Error</title>
     <style>
         body{
-            background-image: url('Model/Assets/scaena_background.png');
+            background-image: url('Assets/scaena_background.png');
         }
         .wrapper{
             width: 350px; padding: 20px;
@@ -61,7 +72,7 @@ if(isset($_POST['deleteInput'])) {
 <body>
 <div class="row" style="position: relative">
     <div class="wrapper" id="errorBlock">
-        <img src="Model/Assets/baseline_error_black_48dp.png" id="errorIcon">
+        <img src="Assets/baseline_error_black_48dp.png" id="errorIcon">
         <br>
         <h4>This action will permananty delete user <?php echo($userManaged) ?> !</h4>
         <br>

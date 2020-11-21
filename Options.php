@@ -1,6 +1,6 @@
 <?php
 session_start();
-include_once('Controller/Elements/dbConnector.php');
+include_once('Elements/dbConnector.php');
 
 if (isset($_SESSION['username'])) {
     $username = $_SESSION['username'];
@@ -22,14 +22,14 @@ $conn->close();
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <?php include_once('Controller/Elements/Imports.html'); ?>
+    <?php include_once('Elements/Imports.html'); ?>
     <title>Options | Scaena</title>
     <script>
         var currentNavItem = "#navLinkOptions";
     </script>
 </head>
 <body>
-<?php include_once('Controller/Elements/Header.php') ?>
+<?php include_once('Elements/Header.php') ?>
 
 <div class="optionsMenuItem">
     <a class="optionsMenuLink" href="Profile.php"><i class="material-icons font-icon-upped">account_circle</i> Edit Your Profile</a>
@@ -42,6 +42,10 @@ if ($isAdmin) {
     echo '</div>';
 }
 ?>
+
+<div class="optionsMenuItem">
+    <a class="optionsMenuLink" href="Announcements.php"><i class="material-icons font-icon-upped">announcement</i> Review Announcements</a>
+</div>
 
 <div class="optionsMenuItem">
     <a class="optionsMenuLink" href="Signout.php"><i class="material-icons font-icon-upped">logout</i> Sign Out</a>

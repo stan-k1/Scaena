@@ -1,6 +1,6 @@
 <?php
 session_start();
-include_once('Controller/Elements/dbConnector.php');
+include_once('Elements/dbConnector.php');
 
 //Access Control
 if (isset($_SESSION['username'])) {
@@ -63,14 +63,14 @@ $conn->close();
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
-    <?php include('Controller/Elements/Imports.html') ?>
+    <?php include('Elements/Imports.html') ?>
     <title>Manage User | Scaena</title>
     <script>
         var currentNavItem = "#navLinkOptions";
     </script>
 </head>
 <body>
-<?php include('Controller/Elements/header.php') ?>
+<?php include('Elements/header.php') ?>
 <h1>Manage User | <?php echo($userManaged_first_name.' '.$userManaged_last_name.' ('.$userManaged.')') ?></h1>
 <h6>Edit User Details and Privileges</h6>
 

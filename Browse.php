@@ -1,6 +1,6 @@
 <?php
 session_start();
-include_once('Controller/Elements/dbConnector.php');
+include_once('Elements/dbConnector.php');
 
 //Access Control
 if (isset($_SESSION['username'])) {
@@ -55,7 +55,7 @@ $rows = $videos_query->num_rows;
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
-    <?php include('Controller/Elements/Imports.html') ?>
+    <?php include('Elements/Imports.html') ?>
     <title>Browse | Scaena</title>
     <script>
         var currentNavItem = "#navLinkAnalyze";
@@ -74,7 +74,7 @@ $rows = $videos_query->num_rows;
 </head>
 <body>
 
-<?php include('Controller/Elements/header.php');?>
+<?php include('Elements/header.php');?>
 
 <div class="container restrictingContainer">
     <div class="dropdown">
@@ -104,7 +104,7 @@ $rows = $videos_query->num_rows;
 
 
         echo "<tr>";
-        echo "<td><a href='Watch.php?view=".$row['filename']. "'>".$row['title'] . "</td>";
+        echo "<td><a href='Analyze.php?view=".$row['filename']. "'>".$row['title'] . "</td>";
         //Print uploader first and last name
         $uploader_query_str="SELECT first_name, last_name from users WHERE username='$uploader'";
         $uploader_query=$conn->query($uploader_query_str);

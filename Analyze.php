@@ -1,6 +1,6 @@
 <?php
 session_start();
-include_once('Controller\Elements\dbConnector.php');
+include_once('Elements\dbConnector.php');
 
 //Retrieves the video based on the url (GET), defaults to the sea test video
 //E.g. Analyze.php?view=sea_video.mp4 loads the Analyze.php page with sea_video.mp4
@@ -35,8 +35,8 @@ if ($user_type != 'admin' && $username != $uploader) {
 if (isset($_POST['delete_video'])){
     if ($_POST['delete_video']=='delete'){
         $delete_query=$conn->query("DELETE FROM content WHERE filename='$view'");
-        unlink("Model/Content/$c_filename");
-        unlink("Model/Content/$poster");
+        unlink("Content/$c_filename");
+        unlink("Content/$poster");
         header('Location: Browse.php');
     }
 }
@@ -47,11 +47,11 @@ $conn->close()
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <?php include('Controller\Elements/TagmgrTag.html') ?>
+    <?php include('Elements/TagmgrTag.html') ?>
     <!--Meta-->
     <meta charset="UTF-8">
     <title>Scaena | Analyze</title>
-    <?php include('Controller\Elements\Imports.html') ?>
+    <?php include('Elements\Imports.html') ?>
 
     <!--Functional Scripts-->
     <script>
@@ -77,7 +77,7 @@ $conn->close()
             }
         }, 6000)
     </script>
-    <?php include('Controller\Elements\ReportingApi.html') ?>
+    <?php include('Elements\ReportingApi.html') ?>
 </head>
 
 <body>
@@ -85,10 +85,10 @@ $conn->close()
     <!-- Load the JavaScript API client and Sign-in library. -->
     <script src="https://apis.google.com/js/client:platform.js"></script>
     <!--Query Script Imports-->
-    <?php include('Controller\Queries\Query_Startup.php') ?>
-    <?php include('Controller\Queries\Query_Analytics.php') ?>
+    <?php include('Queries\Query_Startup.php') ?>
+    <?php include('Queries\Query_Analytics.php') ?>
     <!--Main Body-->
-    <?php include('Controller\Elements\Header.php'); ?>
+    <?php include('Elements\Header.php'); ?>
 
     <div class="container">
         <div class="row">
@@ -96,8 +96,8 @@ $conn->close()
                 <h1 id="contentHeading">Content Preview</h1>
                 <h6>Watch or review your media</h6>
                 <video class="video-js vjs-theme-sea" controls="true" id="video_player"
-                       poster="Model/Content/<?php echo $poster ?>">
-                    <source src="Model/Content/<?php echo $c_filename ?>" type="video/mp4">
+                       poster="Content/<?php echo $poster ?>">
+                    <source src="Content/<?php echo $c_filename ?>" type="video/mp4">
                     <!--                <source src="//vjs.zencdn.net/v/oceans.webm" type="video/webm">-->
                 </video>
                 <script src="https://vjs.zencdn.net/7.8.3/video.js"></script>
@@ -305,7 +305,8 @@ $conn->close()
                                 $stop_year=$year-10;
                                 //Display the last 10 years
                                 while ($year>=$stop_year) {
-                                    echo "<a class='dropdown-item' onclick='academicYear($year)'>$year</a>";
+                                    $preYear=$year-1;
+                                    echo "<a class='dropdown-item' onclick='academicYear($year)'>$preYear - $year</a>";
                                     $year--;
                                 }
                                 ?>

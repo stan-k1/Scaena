@@ -308,6 +308,20 @@ th{
     margin-bottom: 18px;
 }
 
+.announceItem{
+    margin: auto;
+    width: 100%;
+    border: 2px solid rgba(0,0,0,0.2);
+    border-radius: 4px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    margin-bottom: 18px;
+}
+
+.announceItem > p{
+    width: 96%;
+}
+
 .font-icon-upped{
     position: relative;
     top: -3px;
@@ -417,14 +431,14 @@ th{
 }
 
 #welcomeJumbotron {
-     background-image: url("Model/Assets/scaena_banner_min.png");
+     background-image: url("Assets/scaena_banner_min.png");
      background-size: cover;
     margin-top: 0;
     color: white;
  }
 
 #aboutJumbotron {
-    background-image: url("Model/Assets/scaena_background.png");
+    background-image: url("Assets/scaena_background.png");
     background-size: cover;
     color: white;
     background-position: center;

@@ -1,6 +1,6 @@
 <?php
 session_start();
-include_once('Controller/Elements/dbConnector.php');
+include_once('Elements/dbConnector.php');
 
 //Retrieves the video based on the url (GET), defaults to the sea test video
 //E.g. Analyze.php?view=sea_video.mp4 loads the Analyze.php page with sea_video.mp4
@@ -79,17 +79,17 @@ EOD;
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <?php include('Controller/Elements/TagmgrTag.html') ?>
+    <?php include('Elements/TagmgrTag.html') ?>
     <!--Meta-->
     <meta charset="UTF-8">
     <title>Scaena</title>
-    <?php include('Controller/Elements/Imports.html') ?>
+    <?php include('Elements/Imports.html') ?>
 
     <!--Functional Scripts-->
     <script>
         var currentNavItem = "#navLinkWatch";
     </script>
-    <script src="Controller/Elements/PlayerOperations.js"></script>
+    <script src="Elements/PlayerOperations.js"></script>
 </head>
 
 <body>
@@ -104,13 +104,13 @@ EOD;
     }(document, 'script', 'facebook-jssdk'));</script>
 
 <!--Main Body-->
-<?php include('Controller/Elements/Header.php'); ?>
+<?php include('Elements/Header.php'); ?>
 
 <div class="row" id="videoWatchColumn">
     <div class="col-xl-12 text-center">
         <video class="video-js vjs-theme-sea" controls="true" id="video_player_large"
-               poster="Model/Content/<?php echo $poster ?>">
-            <source src="Model/Content/<?php echo $c_filename ?>" type="video/mp4">
+               poster="Content/<?php echo $poster ?>">
+            <source src="Content/<?php echo $c_filename ?>" type="video/mp4">
         </video>
         <script src="https://vjs.zencdn.net/7.8.3/video.js"></script>
         <script src="videojs.ga.min.js"></script>

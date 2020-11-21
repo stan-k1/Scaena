@@ -1,6 +1,6 @@
 <?php
 session_start();
-include_once('Controller/Elements/dbConnector.php');
+include_once('Elements/dbConnector.php');
 
 //Access Control
 if (isset($_SESSION['username'])) {
@@ -27,26 +27,25 @@ DATE_FORMAT(upload_date,'%d/%m/%Y') AS dateFormated from content ORDER BY upload
 $videos_query = $conn->query($videos_query_str);
 $rows = $videos_query->num_rows;
 
-$isAdmin=false;
-$isMod=false;
-if($user_type== "admin"){
-    $isAdmin=true;
-    $isMod=true;
+//Get Announcements from DB
+$announcement_available=false;
+$announce_query_str = "SELECT id, announcer, datetime, announce_text,
+DATE_FORMAT(datetime,'%d/%m/%Y - %H:%i') AS dateFormated from announcements ORDER BY id DESC LIMIT 1";
+$announce_query = $conn->query($announce_query_str);
+if(!is_null($announce_query)){
+    $announcement = $announce_query->num_rows;
+    $announcement_available=true;
 }
-else if($user_type== "mod"){
-    $isMod=true;
-}
-
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <?php include('Controller/Elements/TagmgrTag.html') ?>
+    <?php include('Elements/TagmgrTag.html') ?>
     <!--Meta-->
     <meta charset="UTF-8">
     <title>Scaena</title>
-    <?php include('Controller/Elements/Imports.html') ?>
+    <?php include('Elements/Imports.html') ?>
 
     <!--Functional Scripts-->
     <script>
@@ -60,7 +59,7 @@ else if($user_type== "mod"){
     </script>
 </head>
 <body>
-<?php include('Controller/Elements/Header.php'); ?>
+<?php include('Elements/Header.php'); ?>
 
 
 <div class="jumbotron jumbotron-fluid" id="welcomeJumbotron">
@@ -75,12 +74,16 @@ else if($user_type== "mod"){
 
 <h2>What would you like to do today?</h2>
 <div class="homeMenuItem">
-    <a class="optionsMenuLink" href="Discover.php"><i class="material-icons font-icon-upped">video_library</i> Discover Videos</a>
+    <a class="optionsMenuLink" href="Discover.php"><i class="material-icons font-icon-upped">video_library</i> Watch a Video</a>
 </div>
 <?php
 if ($isMod) {
-echo '<div class="homeMenuItem">';
-    echo '<a class="optionsMenuLink" href="Browse.php"><i class="material-icons font-icon-upped">show_chart</i> Analyze Videos</a>';
+    echo '<div class="homeMenuItem">';
+    echo '<a class="optionsMenuLink" href="Browse.php"><i class="material-icons font-icon-upped">show_chart</i> Analyze Your Videos</a>';
+    echo '</div>';
+
+    echo '<div class="homeMenuItem">';
+    echo '<a class="optionsMenuLink" href="Upload.php"><i class="material-icons font-icon-upped">cloud_upload</i> Upload a Video</a>';
     echo '</div>';
 }
 if ($isAdmin) {
@@ -92,6 +95,30 @@ if ($isAdmin) {
 <div class="homeMenuItem">
     <a class="optionsMenuLink" href="Signout.php"><i class="material-icons font-icon-upped">logout</i> Sign Out</a>
 </div>
+
+<?php
+if($announcement_available) {
+    echo '<h2>See the Latest Announcement</h2>';
+//Get announcements details
+        $row = $announce_query->fetch_array(MYSQLI_ASSOC);
+        $announcer = $row['announcer'];
+        $dateFormated = $row['dateFormated'];
+        $text = $row['announce_text'];
+//Get announcer details
+        $user_query_str = "SELECT first_name, last_name from users WHERE username='$announcer'";
+        $user_query = $conn->query($user_query_str);
+        $user_row = $user_query->fetch_array(MYSQLI_ASSOC);
+        $uploder_name = $user_row['first_name'] . " " . $user_row['last_name'];
+
+        echo <<<EOD
+        <div class='announceItem'>
+            <h5><i>Announcement by $uploder_name on $dateFormated</i></h5>
+            <p>$text</p>
+        </div>
+        <p><a href="Announcements.php">Review all announcements</a></p>
+EOD;
+}
+?>
 
 <h2>Explore the Latest Uploads</h2>
 <?php
@@ -113,7 +140,7 @@ for ($j = 0; $j < $rows; ++$j) {
     }
 
     echo "<tr>";
-    echo "<td><img src='Model/Content/" . $poster . "'alt='Scaena Video' class='previewImg' width='150' height='100'><a href='Watch.php?view=" . $row['filename'] . "'>" . $row['title'] . "</td>";
+    echo "<td><img src='Content/" . $poster . "'alt='Scaena Video' class='previewImg' width='150' height='100'><a href='Watch.php?view=" . $row['filename'] . "'>" . $row['title'] . "</td>";
     //Print uploader first and last name
     $user_query_str = "SELECT first_name, last_name from users WHERE username='$uploader'";
     $user_query = $conn->query($user_query_str);

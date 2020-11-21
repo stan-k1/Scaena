@@ -1,6 +1,6 @@
 <?php
 session_start();
-include_once('Controller/Elements/dbConnector.php');
+include_once('Elements/dbConnector.php');
 $_SESSION['signin_failed']=false;
 
 if(isset($_POST['username'])){
@@ -26,22 +26,22 @@ $conn->close();
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <?php include('Controller/Elements/Imports.html') ?>
+    <?php include('Elements/Imports.html') ?>
     <meta charset="UTF-8">
     <title>Sign in | Sceana</title>
     <style type="text/css">
         body{ font: 14px sans-serif; }
         .wrapper{ width: 350px; padding: 20px; }
          body{
-             background-image: url('Model/Assets/Backgrounds/background19.jpg');
+             background-image: url('Assets/Backgrounds/background19.jpg');
          }
     </style>
 </head>
 <body>
-<?php include_once('Controller/Elements/getBackground.php') ?>
+<?php include_once('Elements/getBackground.php') ?>
 <div class="row" style="position: relative">
     <div class="wrapper" id="signinBlock">
-        <img src="Model/Assets/scaena_logo_transparent.png" alt="Scaena" width="200" height="120" class="center">
+        <img src="Assets/scaena_logo_transparent.png" alt="Scaena" width="200" height="120" class="center">
         <h2>Sign in</h2>
         <br>
         <?php if($_SESSION['signin_failed']){echo("<p style='color: darkred; font-weight: bold'>Incorrect username or password. Please try again. </p> <br>");}?>

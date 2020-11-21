@@ -8,11 +8,11 @@ if(!empty($_SESSION['cust_error_msg'])){
 <!DOCTYPE HTML>
 <HTML lang="en">
 <head>
-    <?php include('Controller/Elements/Imports.html') ?>
+    <?php include('Elements/Imports.html') ?>
     <title>Error</title>
     <style>
         body{
-            background-image: url('Model/Assets/scaena_background.png');
+            background-image: url('Assets/scaena_background.png');
         }
         .wrapper{
             width: 350px; padding: 20px;
@@ -23,7 +23,7 @@ if(!empty($_SESSION['cust_error_msg'])){
 <body>
 <div class="row" style="position: relative">
     <div class="wrapper" id="errorBlock">
-        <img src="Model/Assets/baseline_error_black_48dp.png" id="errorIcon">
+        <img src="Assets/baseline_error_black_48dp.png" id="errorIcon">
         <br>
        <h4>An error has occured.</h4>
         <br>
